@@ -285,7 +285,7 @@ class _WordleGameScreenState extends State<WordleGameScreen> {
             end: Alignment.bottomRight,
             colors: [
               widget.theme.primaryColor,
-              widget.theme.primaryColor.withValues(alpha: 0.8),
+              widget.theme.primaryColor.withOpacity(0.8),
             ],
           ),
         ),
@@ -382,10 +382,8 @@ class _WordleGameScreenState extends State<WordleGameScreen> {
                               ),
                               decoration: BoxDecoration(
                                 color: won
-                                    ? const Color(0xFF22C55E)
-                                        .withValues(alpha: 0.2)
-                                    : const Color(0xFFEF4444)
-                                        .withValues(alpha: 0.2),
+                                    ? const Color(0xFF22C55E).withOpacity(0.2)
+                                    : const Color(0xFFEF4444).withOpacity(0.2),
                                 borderRadius: BorderRadius.circular(8),
                                 border: Border.all(
                                   color: won

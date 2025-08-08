@@ -30,7 +30,7 @@ class EndConditionScreen extends StatelessWidget {
             end: Alignment.bottomRight,
             colors: [
               theme.primaryColor,
-              theme.primaryColor.withValues(alpha: 0.8),
+              theme.primaryColor.withOpacity(0.8),
             ],
           ),
         ),
@@ -71,7 +71,7 @@ class EndConditionScreen extends StatelessWidget {
                       color: theme.surfaceColor,
                       borderRadius: BorderRadius.circular(12),
                       border: Border.all(
-                        color: Colors.white.withValues(alpha: 0.2),
+                        color: Colors.white.withOpacity(0.2),
                       ),
                     ),
                     child: Column(
@@ -106,7 +106,7 @@ class EndConditionScreen extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: WordTranslations.getRarityColor(
                                 WordTranslations.getRarity(word) ?? 1)
-                            .withValues(alpha: 0.2),
+                            .withOpacity(0.2),
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(
                           color: WordTranslations.getRarityColor(
@@ -146,7 +146,7 @@ class EndConditionScreen extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 12, vertical: 8),
                       decoration: BoxDecoration(
-                        color: Colors.orange.withValues(alpha: 0.2),
+                        color: Colors.orange.withOpacity(0.2),
                         borderRadius: BorderRadius.circular(8),
                         border: Border.all(
                           color: Colors.orange,

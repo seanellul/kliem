@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
 import 'screens/main_menu_screen.dart';
 import 'screens/wordle_game_screen.dart';
 import 'screens/word_dex_screen.dart';
 import 'screens/end_condition_screen.dart';
+import 'screens/settings_screen.dart';
 import 'models/game_stats.dart';
 import 'models/theme_model.dart';
 import 'models/word_dex.dart';
 import 'utils/word_translations.dart';
 import 'utils/difficulty_manager.dart';
+import 'services/storage_service.dart';
 
 void main() {
   runApp(const MalteseWordleApp());
@@ -60,36 +61,22 @@ class _AppWrapperState extends State<AppWrapper> {
   }
 
   Future<void> _loadSavedData() async {
-    final prefs = await SharedPreferences.getInstance();
+    // Check for data recovery first
+    await StorageService.checkAndRecoverData();
 
-    // Load stats
-    final wordsCaught = prefs.getInt('kelma-stats-wordsCaught') ?? 0;
-    final wordsEscaped = prefs.getInt('kelma-stats-wordsEscaped') ?? 0;
-    final currentStreak = prefs.getInt('kelma-stats-currentStreak') ?? 0;
-    final maxStreak = prefs.getInt('kelma-stats-maxStreak') ?? 0;
-    final caughtWordsJson = prefs.getString('kelma-stats-caughtWords') ?? '[]';
-    final caughtWords = Set<String>.from(jsonDecode(caughtWordsJson));
-    final escapedWordsJson =
-        prefs.getString('kelma-stats-escapedWords') ?? '[]';
-    final escapedWords = Set<String>.from(jsonDecode(escapedWordsJson));
-
-    // Load Word-Dex
-    final wordDexJson = prefs.getString('kelma-worddex') ?? '{"entries":{}}';
-    final wordDexData = jsonDecode(wordDexJson);
+    // Load stats using StorageService
+    final loadedStats = await StorageService.loadGameStats();
+    
+    // Load Word-Dex using StorageService with backup fallback
+    final loadedWordDex = await StorageService.loadWordDex();
 
     setState(() {
-      stats = GameStats(
-        wordsCaught: wordsCaught,
-        wordsEscaped: wordsEscaped,
-        currentStreak: currentStreak,
-        maxStreak: maxStreak,
-        caughtWords: caughtWords,
-        escapedWords: escapedWords,
-      );
-      wordDex = WordDex.fromJson(wordDexData);
+      stats = loadedStats;
+      wordDex = loadedWordDex;
     });
 
     // Load theme
+    final prefs = await SharedPreferences.getInstance();
     final savedTheme = prefs.getString('kelma-theme') ?? 'default';
     setState(() {
       currentTheme = savedTheme;
@@ -98,16 +85,9 @@ class _AppWrapperState extends State<AppWrapper> {
   }
 
   Future<void> _saveStats() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setInt('kelma-stats-wordsCaught', stats.wordsCaught);
-    await prefs.setInt('kelma-stats-wordsEscaped', stats.wordsEscaped);
-    await prefs.setInt('kelma-stats-currentStreak', stats.currentStreak);
-    await prefs.setInt('kelma-stats-maxStreak', stats.maxStreak);
-    await prefs.setString(
-        'kelma-stats-caughtWords', jsonEncode(stats.caughtWords.toList()));
-    await prefs.setString(
-        'kelma-stats-escapedWords', jsonEncode(stats.escapedWords.toList()));
-    await prefs.setString('kelma-worddex', jsonEncode(wordDex.toJson()));
+    // Save both stats and WordDex using StorageService
+    await StorageService.saveGameStats(stats);
+    await StorageService.saveWordDex(wordDex);
   }
 
   Future<void> _saveTheme() async {
@@ -127,6 +107,12 @@ class _AppWrapperState extends State<AppWrapper> {
   void handleShowWordDex() {
     setState(() {
       gameMode = GameMode.wordDex;
+    });
+  }
+
+  void handleShowSettings() {
+    setState(() {
+      gameMode = GameMode.settings;
     });
   }
 
@@ -178,14 +164,10 @@ class _AppWrapperState extends State<AppWrapper> {
       return MainMenuScreen(
         onPlayAdventure: handlePlayAdventure,
         onShowWordDex: handleShowWordDex,
-        onShowStyles: () => setState(() => showStyles = true),
+        onShowSettings: handleShowSettings,
         stats: stats,
         wordDex: wordDex,
         theme: theme,
-        onThemeSelect: handleThemeSelect,
-        showStyles: showStyles,
-        onCloseStyles: () => setState(() => showStyles = false),
-        currentTheme: currentTheme,
       );
     } else if (gameMode == GameMode.wordDex) {
       return WordDexScreen(
@@ -193,6 +175,14 @@ class _AppWrapperState extends State<AppWrapper> {
         theme: theme,
         onBack: handleBackToMenu,
         stats: stats,
+      );
+    } else if (gameMode == GameMode.settings) {
+      return SettingsScreen(
+        theme: theme,
+        currentTheme: currentTheme,
+        onThemeSelect: handleThemeSelect,
+        onDataChanged: _loadSavedData,
+        onBack: handleBackToMenu,
       );
     } else if (gameMode == GameMode.endCondition) {
       return EndConditionScreen(
@@ -214,4 +204,4 @@ class _AppWrapperState extends State<AppWrapper> {
   }
 }
 
-enum GameMode { menu, adventure, wordDex, endCondition }
+enum GameMode { menu, adventure, wordDex, endCondition, settings }

@@ -20,7 +20,7 @@ class StylesModal extends StatelessWidget {
     if (!isOpen) return const SizedBox.shrink();
 
     return Material(
-      color: Colors.black.withValues(alpha: 0.5),
+      color: Colors.black.withOpacity(0.5),
       child: SafeArea(
         child: Center(
           child: Container(
@@ -132,7 +132,7 @@ class StylesModal extends StatelessWidget {
                 gradient: LinearGradient(
                   colors: [
                     theme.primaryColor,
-                    theme.primaryColor.withValues(alpha: 0.8),
+                    theme.primaryColor.withOpacity(0.8),
                   ],
                 ),
                 borderRadius:
@@ -170,7 +170,7 @@ class StylesModal extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 8, vertical: 4),
                         decoration: BoxDecoration(
-                          color: Colors.black.withValues(alpha: 0.3),
+                          color: Colors.black.withOpacity(0.3),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: const Text(
@@ -189,7 +189,7 @@ class StylesModal extends StatelessWidget {
                       child: Container(
                         padding: const EdgeInsets.all(4),
                         decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.2),
+                          color: Colors.white.withOpacity(0.2),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: const Icon(
@@ -220,7 +220,7 @@ class StylesModal extends StatelessWidget {
                       gradient: LinearGradient(
                         colors: [
                           theme.secondaryColor,
-                          theme.secondaryColor.withValues(alpha: 0.8)
+                          theme.secondaryColor.withOpacity(0.8)
                         ],
                       ),
                       borderRadius: BorderRadius.circular(4),
@@ -234,7 +234,7 @@ class StylesModal extends StatelessWidget {
                       gradient: LinearGradient(
                         colors: [
                           theme.accentColor,
-                          theme.accentColor.withValues(alpha: 0.8)
+                          theme.accentColor.withOpacity(0.8)
                         ],
                       ),
                       borderRadius: BorderRadius.circular(4),

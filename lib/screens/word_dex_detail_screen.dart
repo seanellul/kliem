@@ -29,7 +29,7 @@ class WordDexDetailScreen extends StatelessWidget {
             end: Alignment.bottomRight,
             colors: [
               theme.primaryColor,
-              theme.primaryColor.withValues(alpha: 0.8),
+              theme.primaryColor.withOpacity(0.8),
             ],
           ),
         ),
@@ -68,8 +68,7 @@ class WordDexDetailScreen extends StatelessWidget {
                 decoration: BoxDecoration(
                   color: theme.surfaceColor,
                   borderRadius: BorderRadius.circular(16),
-                  border:
-                      Border.all(color: Colors.white.withValues(alpha: 0.2)),
+                  border: Border.all(color: Colors.white.withOpacity(0.2)),
                 ),
                 child: Column(
                   children: [
@@ -103,7 +102,7 @@ class WordDexDetailScreen extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 12, vertical: 6),
                         decoration: BoxDecoration(
-                          color: Colors.blue.withValues(alpha: 0.2),
+                          color: Colors.blue.withOpacity(0.2),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Text(
@@ -192,7 +191,7 @@ class WordDexDetailScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: theme.surfaceColor,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+        border: Border.all(color: Colors.white.withOpacity(0.1)),
       ),
       child: Row(
         children: [
@@ -233,7 +232,7 @@ class WordDexDetailScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: theme.surfaceColor,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+        border: Border.all(color: Colors.white.withOpacity(0.1)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -263,7 +262,7 @@ class WordDexDetailScreen extends StatelessWidget {
               margin: const EdgeInsets.only(bottom: 8),
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: Colors.teal.withValues(alpha: 0.1),
+                color: Colors.teal.withOpacity(0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
               child: Column(
@@ -307,7 +306,7 @@ class WordDexDetailScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: theme.surfaceColor,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+        border: Border.all(color: Colors.white.withOpacity(0.1)),
       ),
       child: Row(
         children: [
@@ -370,7 +369,7 @@ class WordDexDetailScreen extends StatelessWidget {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           decoration: BoxDecoration(
-            color: rarityColor.withValues(alpha: 0.2),
+            color: rarityColor.withOpacity(0.2),
             borderRadius: BorderRadius.circular(12),
             border: Border.all(color: rarityColor, width: 1),
           ),
@@ -404,7 +403,7 @@ class WordDexDetailScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: theme.surfaceColor,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.1)),
+        border: Border.all(color: Colors.white.withOpacity(0.1)),
       ),
       child: Column(
         children: [

@@ -3,32 +3,23 @@ import '../models/game_stats.dart';
 import '../models/theme_model.dart';
 import '../models/word_dex.dart';
 import '../utils/difficulty_manager.dart';
-import 'styles_modal.dart';
 
 class MainMenuScreen extends StatelessWidget {
   final VoidCallback onPlayAdventure;
   final VoidCallback onShowWordDex;
-  final VoidCallback onShowStyles;
+  final VoidCallback onShowSettings;
   final GameStats stats;
   final WordDex wordDex;
   final ThemeModel theme;
-  final Function(String) onThemeSelect;
-  final bool showStyles;
-  final VoidCallback onCloseStyles;
-  final String currentTheme;
 
   const MainMenuScreen({
     super.key,
     required this.onPlayAdventure,
     required this.onShowWordDex,
-    required this.onShowStyles,
+    required this.onShowSettings,
     required this.stats,
     required this.wordDex,
     required this.theme,
-    required this.onThemeSelect,
-    required this.showStyles,
-    required this.onCloseStyles,
-    required this.currentTheme,
   });
 
   @override
@@ -43,17 +34,46 @@ class MainMenuScreen extends StatelessWidget {
                 end: Alignment.bottomRight,
                 colors: [
                   theme.primaryColor,
-                  theme.primaryColor.withValues(alpha: 0.8),
-                  theme.primaryColor.withValues(alpha: 0.6),
+                  theme.primaryColor.withOpacity(0.8),
+                  theme.primaryColor.withOpacity(0.6),
                 ],
               ),
             ),
             child: SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
+              child: Column(
+                children: [
+                  // Top bar with settings icon
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.15),
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(color: Colors.white.withOpacity(0.2)),
+                          ),
+                          child: IconButton(
+                            onPressed: onShowSettings,
+                            icon: Icon(
+                              Icons.settings,
+                              color: Colors.white,
+                              size: 24,
+                            ),
+                            tooltip: 'Settings',
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  // Main content
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
                     // Title
                     Column(
                       children: [
@@ -75,7 +95,7 @@ class MainMenuScreen extends StatelessWidget {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          'Word Adventure',
+                          'Discover Maltese Words',
                           style: TextStyle(
                             fontSize: 18,
                             color: theme.textSecondaryColor,
@@ -91,8 +111,8 @@ class MainMenuScreen extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: theme.surfaceColor,
                         borderRadius: BorderRadius.circular(16),
-                        border: Border.all(
-                            color: Colors.white.withValues(alpha: 0.2)),
+                        border:
+                            Border.all(color: Colors.white.withOpacity(0.2)),
                       ),
                       child: Column(
                         children: [
@@ -145,49 +165,38 @@ class MainMenuScreen extends StatelessWidget {
 
                     // Progression Card
                     _buildProgressionCard(),
-                    const SizedBox(height: 32),
+                    const SizedBox(height: 40),
 
                     // Game Mode Buttons
-                    Column(
-                      children: [
-                        _buildGameButton(
-                          onPressed: onPlayAdventure,
-                          text: '🗺️ Word Hunt',
-                          gradient: LinearGradient(
-                            colors: [
-                              theme.secondaryColor,
-                              theme.secondaryColor.withValues(alpha: 0.8)
-                            ],
+                    Container(
+                      constraints: const BoxConstraints(maxWidth: 300),
+                      child: Column(
+                        children: [
+                          _buildGameButton(
+                            onPressed: onPlayAdventure,
+                            text: '🗺️ Word Hunt',
+                            gradient: LinearGradient(
+                              colors: [
+                                theme.secondaryColor,
+                                theme.secondaryColor.withOpacity(0.8)
+                              ],
+                            ),
+                            icon: Icons.explore,
                           ),
-                          icon: Icons.explore,
-                        ),
-                        const SizedBox(height: 16),
-                        _buildGameButton(
-                          onPressed: onShowWordDex,
-                          text: '📚 Word-Dex',
-                          gradient: LinearGradient(
-                            colors: [
-                              theme.accentColor,
-                              theme.accentColor.withValues(alpha: 0.8)
-                            ],
+                          const SizedBox(height: 20),
+                          _buildGameButton(
+                            onPressed: onShowWordDex,
+                            text: '📚 Word-Dex',
+                            gradient: LinearGradient(
+                              colors: [
+                                theme.accentColor,
+                                theme.accentColor.withOpacity(0.8)
+                              ],
+                            ),
+                            icon: Icons.book,
                           ),
-                          icon: Icons.book,
-                        ),
-                        const SizedBox(height: 16),
-                        _buildGameButton(
-                          onPressed: onShowStyles,
-                          text: '🎨 Stili',
-                          gradient: LinearGradient(
-                            colors: [
-                              theme.surfaceColor,
-                              theme.surfaceColor.withValues(alpha: 0.8)
-                            ],
-                          ),
-                          textColor: theme.textColor,
-                          border: true,
-                          icon: Icons.palette,
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -195,13 +204,6 @@ class MainMenuScreen extends StatelessWidget {
             ),
           ),
         ),
-        if (showStyles)
-          StylesModal(
-            isOpen: showStyles,
-            onClose: onCloseStyles,
-            currentTheme: currentTheme,
-            onThemeSelect: onThemeSelect,
-          ),
       ],
     );
   }
@@ -220,7 +222,7 @@ class MainMenuScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: theme.surfaceColor,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
+        border: Border.all(color: Colors.white.withOpacity(0.2)),
       ),
       child: Column(
         children: [
@@ -280,7 +282,7 @@ class MainMenuScreen extends StatelessWidget {
               ),
               CircularProgressIndicator(
                 value: phaseProgress.clamp(0.0, 1.0),
-                backgroundColor: Colors.white.withValues(alpha: 0.2),
+                backgroundColor: Colors.white.withOpacity(0.2),
                 valueColor: AlwaysStoppedAnimation<Color>(theme.accentColor),
                 strokeWidth: 4,
               ),
@@ -336,16 +338,15 @@ class MainMenuScreen extends StatelessWidget {
   }) {
     return Container(
       width: double.infinity,
-      height: 60,
+      height: 70,
       decoration: BoxDecoration(
         gradient: gradient,
         borderRadius: BorderRadius.circular(16),
-        border: border
-            ? Border.all(color: Colors.white.withValues(alpha: 0.2))
-            : null,
+        border:
+            border ? Border.all(color: Colors.white.withOpacity(0.2)) : null,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.1),
+            color: Colors.black.withOpacity(0.1),
             blurRadius: 8,
             offset: const Offset(0, 4),
           ),
