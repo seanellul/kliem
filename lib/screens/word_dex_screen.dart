@@ -37,10 +37,7 @@ class _WordDexScreenState extends State<WordDexScreen> {
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [
-              widget.theme.primaryColor,
-              widget.theme.primaryColor.withOpacity(0.8),
-            ],
+            colors: widget.theme.backgroundGradient,
           ),
         ),
         child: SafeArea(

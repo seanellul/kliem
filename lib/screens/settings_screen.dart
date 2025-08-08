@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import '../models/theme_model.dart';
 import '../widgets/backup_dialog.dart';
+import '../widgets/slide_route.dart';
+import '../services/onboarding_service.dart';
 import 'styles_modal.dart';
 import 'app_info_screen.dart';
+import 'how_to_play_screen.dart';
+import 'tutorial_screen.dart';
 
 class SettingsScreen extends StatelessWidget {
   final ThemeModel theme;
@@ -22,122 +26,136 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              theme.primaryColor,
-              theme.primaryColor.withOpacity(0.8),
-              theme.primaryColor.withOpacity(0.6),
-            ],
-          ),
-        ),
-        child: SafeArea(
-          child: Column(
-            children: [
-              // Header
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Row(
-                  children: [
-                    IconButton(
-                      onPressed: onBack,
-                      icon: Icon(
-                        Icons.arrow_back,
-                        color: Colors.white,
-                        size: 28,
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      'Settings',
-                      style: TextStyle(
-                        fontSize: 28,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
-                ),
+    return GestureDetector(
+        // Add swipe-to-exit gesture
+        onHorizontalDragUpdate: (details) {
+          // Detect right swipe (positive delta)
+          if (details.delta.dx > 0) {
+            // Add some resistance by requiring minimum swipe distance
+            if (details.primaryDelta! > 8) {
+              onBack();
+            }
+          }
+        },
+        child: Scaffold(
+          body: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  theme.primaryColor,
+                  theme.primaryColor.withOpacity(0.8),
+                  theme.primaryColor.withOpacity(0.6),
+                ],
               ),
-              
-              // Settings Content
-              Expanded(
-                child: Container(
-                  margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                  decoration: BoxDecoration(
-                    color: theme.surfaceColor,
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: Colors.white.withOpacity(0.2)),
-                  ),
-                  child: Column(
-                    children: [
-                      Expanded(
-                        child: ListView(
-                          padding: const EdgeInsets.all(16),
-                          children: [
-                            _buildSectionTitle('Appearance'),
-                            _buildSettingsTile(
-                              icon: Icons.palette,
-                              iconColor: theme.accentColor,
-                              title: 'Themes',
-                              subtitle: 'Choose your favorite colors',
-                              onTap: () => _showStylesModal(context),
-                            ),
-                            
-                            const SizedBox(height: 24),
-                            _buildSectionTitle('Data'),
-                            _buildSettingsTile(
-                              icon: Icons.backup,
-                              iconColor: theme.secondaryColor,
-                              title: 'Backup WordDex',
-                              subtitle: 'Save and restore your collection',
-                              onTap: () => _showBackupDialog(context),
-                            ),
-                            
-                            const SizedBox(height: 24),
-                            _buildSectionTitle('Help'),
-                            _buildSettingsTile(
-                              icon: Icons.help_outline,
-                              iconColor: theme.primaryColor,
-                              title: 'How to Play',
-                              subtitle: 'Learn the basics',
-                              onTap: () => _showHowToPlay(context),
-                              showSoon: true,
-                            ),
-                            _buildSettingsTile(
-                              icon: Icons.ondemand_video,
-                              iconColor: theme.primaryColor,
-                              title: 'Tutorial',
-                              subtitle: 'Interactive walkthrough',
-                              onTap: () => _showTutorial(context),
-                              showSoon: true,
-                            ),
-                            
-                            const SizedBox(height: 24),
-                            _buildSectionTitle('About'),
-                            _buildSettingsTile(
-                              icon: Icons.info_outline,
-                              iconColor: theme.accentColor,
-                              title: 'App Info',
-                              subtitle: 'Version, credits, and more',
-                              onTap: () => _showAppInfo(context),
-                            ),
-                          ],
+            ),
+            child: SafeArea(
+              child: Column(
+                children: [
+                  // Header
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Row(
+                      children: [
+                        IconButton(
+                          onPressed: onBack,
+                          icon: Icon(
+                            Icons.arrow_back,
+                            color: theme.textColor,
+                            size: 28,
+                          ),
                         ),
-                      ),
-                    ],
+                        const SizedBox(width: 8),
+                        Text(
+                          'Settings',
+                          style: TextStyle(
+                            fontSize: 28,
+                            fontWeight: FontWeight.bold,
+                            color: theme.textColor,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
+
+                  // Settings Content
+                  Expanded(
+                    child: Container(
+                      margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                      decoration: BoxDecoration(
+                        color: theme.surfaceColor,
+                        borderRadius: BorderRadius.circular(20),
+                        border:
+                            Border.all(color: Colors.white.withOpacity(0.2)),
+                      ),
+                      child: Column(
+                        children: [
+                          Expanded(
+                            child: ListView(
+                              padding: const EdgeInsets.all(16),
+                              children: [
+                                _buildSectionTitle('Appearance'),
+                                _buildSettingsTile(
+                                  icon: Icons.palette,
+                                  iconColor: theme.accentColor,
+                                  title: 'Themes',
+                                  subtitle: 'Choose your favorite colors',
+                                  onTap: () => _showStylesModal(context),
+                                ),
+                                const SizedBox(height: 24),
+                                _buildSectionTitle('Data'),
+                                _buildSettingsTile(
+                                  icon: Icons.backup,
+                                  iconColor: theme.accentColor,
+                                  title: 'Backup WordDex',
+                                  subtitle: 'Save and restore your collection',
+                                  onTap: () => _showBackupDialog(context),
+                                ),
+                                const SizedBox(height: 24),
+                                _buildSectionTitle('Help'),
+                                _buildSettingsTile(
+                                  icon: Icons.help_outline,
+                                  iconColor: theme.accentColor,
+                                  title: 'How to Play',
+                                  subtitle: 'Learn the basics',
+                                  onTap: () => _showHowToPlay(context),
+                                ),
+                                _buildSettingsTile(
+                                  icon: Icons.ondemand_video,
+                                  iconColor: theme.accentColor,
+                                  title: 'Tutorial',
+                                  subtitle: 'Interactive walkthrough',
+                                  onTap: () => _showTutorial(context),
+                                ),
+                                _buildSettingsTile(
+                                  icon: Icons.refresh,
+                                  iconColor: theme.accentColor,
+                                  title: 'Reset Onboarding',
+                                  subtitle: 'Show welcome flow again',
+                                  onTap: () => _resetOnboarding(context),
+                                ),
+                                const SizedBox(height: 24),
+                                _buildSectionTitle('About'),
+                                _buildSettingsTile(
+                                  icon: Icons.info_outline,
+                                  iconColor: theme.accentColor,
+                                  title: 'App Info',
+                                  subtitle: 'Version, credits, and more',
+                                  onTap: () => _showAppInfo(context),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 
   Widget _buildSectionTitle(String title) {
@@ -165,9 +183,9 @@ class SettingsScreen extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(bottom: 12),
       decoration: BoxDecoration(
-        color: theme.backgroundColor,
+        color: theme.surfaceColor,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: Colors.white.withOpacity(0.1)),
+        border: Border.all(color: theme.backgroundColor.withOpacity(0.5)),
       ),
       child: ListTile(
         leading: Container(
@@ -234,7 +252,7 @@ class SettingsScreen extends StatelessWidget {
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (context) => StylesModal(
-        theme: theme,
+        isOpen: true,
         currentTheme: currentTheme,
         onThemeSelect: onThemeSelect,
         onClose: () => Navigator.of(context).pop(),
@@ -258,32 +276,83 @@ class SettingsScreen extends StatelessWidget {
 
   void _showAppInfo(BuildContext context) {
     Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (context) => AppInfoScreen(
+      SlideRoute(
+        page: AppInfoScreen(
           theme: theme,
           onBack: () => Navigator.of(context).pop(),
         ),
+        direction: SlideDirection.rightToLeft,
       ),
     );
   }
 
   void _showHowToPlay(BuildContext context) {
-    // TODO: Implement How to Play screen
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('How to Play coming soon!'),
-        backgroundColor: theme.primaryColor,
+    Navigator.of(context).push(
+      SlideRoute(
+        page: HowToPlayScreen(
+          theme: theme,
+          onBack: () => Navigator.of(context).pop(),
+        ),
+        direction: SlideDirection.rightToLeft,
       ),
     );
   }
 
   void _showTutorial(BuildContext context) {
-    // TODO: Implement Tutorial/Onboarding
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Interactive tutorial coming soon!'),
-        backgroundColor: theme.primaryColor,
+    Navigator.of(context).push(
+      SlideRoute(
+        page: TutorialScreen(
+          theme: theme,
+          onComplete: () {
+            Navigator.of(context).pop();
+          },
+        ),
+        direction: SlideDirection.rightToLeft,
       ),
     );
+  }
+
+  void _resetOnboarding(BuildContext context) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: theme.primaryColor,
+        title: Text(
+          'Reset Onboarding',
+          style: TextStyle(color: theme.textColor),
+        ),
+        content: Text(
+          'This will show the welcome flow again when you restart the app. Continue?',
+          style: TextStyle(color: theme.textColor),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: Text(
+              'Cancel',
+              style: TextStyle(color: theme.textColor.withOpacity(0.7)),
+            ),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(true),
+            child: Text(
+              'Reset',
+              style: TextStyle(color: theme.accentColor),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed == true) {
+      await OnboardingService.resetOnboarding();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text(
+              'Onboarding reset! Restart the app to see the welcome flow.'),
+          backgroundColor: theme.primaryColor,
+        ),
+      );
+    }
   }
 }

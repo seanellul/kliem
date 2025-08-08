@@ -24,188 +24,177 @@ class MainMenuScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Scaffold(
-          body: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  theme.primaryColor,
-                  theme.primaryColor.withOpacity(0.8),
-                  theme.primaryColor.withOpacity(0.6),
-                ],
-              ),
+    return Stack(children: [
+      Scaffold(
+        body: Container(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: theme.backgroundGradient,
             ),
-            child: SafeArea(
-              child: Column(
-                children: [
-                  // Top bar with settings icon
-                  Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white.withOpacity(0.15),
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: Colors.white.withOpacity(0.2)),
-                          ),
-                          child: IconButton(
-                            onPressed: onShowSettings,
-                            icon: Icon(
-                              Icons.settings,
-                              color: Colors.white,
-                              size: 24,
-                            ),
-                            tooltip: 'Settings',
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  // Main content
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                    // Title
-                    Column(
-                      children: [
-                        ShaderMask(
-                          shaderCallback: (bounds) => LinearGradient(
-                            colors: [
-                              theme.secondaryColor,
-                              theme.accentColor,
-                            ],
-                          ).createShader(bounds),
-                          child: Text(
-                            'KLIEM',
-                            style: TextStyle(
-                              fontSize: 48,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          'Discover Maltese Words',
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: theme.textSecondaryColor,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 32),
-
-                    // Stats Card
+          ),
+          child: SafeArea(
+            child: Column(children: [
+              // Top bar with settings icon
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
                     Container(
-                      padding: const EdgeInsets.all(16),
                       decoration: BoxDecoration(
                         color: theme.surfaceColor,
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: BorderRadius.circular(12),
                         border:
                             Border.all(color: Colors.white.withOpacity(0.2)),
                       ),
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              Expanded(
-                                child: _buildStatItem(
-                                  icon: Icons.check_circle,
-                                  iconColor: Colors.green,
-                                  label: 'Caught',
-                                  value: stats.wordsCaught.toString(),
-                                ),
-                              ),
-                              // Expanded(
-                              //   child: _buildStatItem(
-                              //     icon: Icons.cancel,
-                              //     iconColor: Colors.red,
-                              //     label: 'Escaped',
-                              //     value: stats.wordsEscaped.toString(),
-                              //   ),
-                              // ),
-                              Expanded(
-                                child: _buildStatItem(
-                                  icon: Icons.book,
-                                  iconColor: Colors.blue,
-                                  label: 'Left',
-                                  value: stats.wordsLeft.toString(),
-                                ),
-                              ),
-                            ],
-                          ),
-                          // const SizedBox(height: 16),
-                          // Row(
-                          //   children: [
-
-                          //     Expanded(
-                          //       child: _buildStatItem(
-                          //         icon: Icons.trending_up,
-                          //         iconColor: Colors.orange,
-                          //         label: 'Rate',
-                          //         value: '${stats.catchRate.round()}%',
-                          //       ),
-                          //     ),
-                          //   ],
-                          // ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-
-                    // Progression Card
-                    _buildProgressionCard(),
-                    const SizedBox(height: 40),
-
-                    // Game Mode Buttons
-                    Container(
-                      constraints: const BoxConstraints(maxWidth: 300),
-                      child: Column(
-                        children: [
-                          _buildGameButton(
-                            onPressed: onPlayAdventure,
-                            text: '🗺️ Word Hunt',
-                            gradient: LinearGradient(
-                              colors: [
-                                theme.secondaryColor,
-                                theme.secondaryColor.withOpacity(0.8)
-                              ],
-                            ),
-                            icon: Icons.explore,
-                          ),
-                          const SizedBox(height: 20),
-                          _buildGameButton(
-                            onPressed: onShowWordDex,
-                            text: '📚 Word-Dex',
-                            gradient: LinearGradient(
-                              colors: [
-                                theme.accentColor,
-                                theme.accentColor.withOpacity(0.8)
-                              ],
-                            ),
-                            icon: Icons.book,
-                          ),
-                        ],
+                      child: IconButton(
+                        onPressed: onShowSettings,
+                        icon: Icon(
+                          Icons.settings,
+                          color: theme.textColor,
+                          size: 24,
+                        ),
+                        tooltip: 'Settings',
                       ),
                     ),
                   ],
                 ),
               ),
-            ),
+              // Main content
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // Title
+                      Column(
+                        children: [
+                          ShaderMask(
+                            shaderCallback: (bounds) => LinearGradient(
+                              colors: [theme.accentColor, theme.accentColor],
+                            ).createShader(bounds),
+                            child: Text(
+                              'KLIEM',
+                              style: TextStyle(
+                                fontSize: 48,
+                                fontWeight: FontWeight.bold,
+                                color: theme.textColor,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'Discover Maltese Words',
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: theme.textSecondaryColor,
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 32),
+
+                      // Stats Card
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: theme.surfaceColor,
+                          borderRadius: BorderRadius.circular(16),
+                          border:
+                              Border.all(color: Colors.white.withOpacity(0.2)),
+                        ),
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: _buildStatItem(
+                                    icon: Icons.check_circle,
+                                    iconColor: Colors.green,
+                                    label: 'Caught',
+                                    value: stats.wordsCaught.toString(),
+                                  ),
+                                ),
+                                // Expanded(
+                                //   child: _buildStatItem(
+                                //     icon: Icons.cancel,
+                                //     iconColor: Colors.red,
+                                //     label: 'Escaped',
+                                //     value: stats.wordsEscaped.toString(),
+                                //   ),
+                                // ),
+                                Expanded(
+                                  child: _buildStatItem(
+                                    icon: Icons.book,
+                                    iconColor: Colors.blue,
+                                    label: 'Left',
+                                    value: stats.wordsLeft.toString(),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            // const SizedBox(height: 16),
+                            // Row(
+                            //   children: [
+
+                            //     Expanded(
+                            //       child: _buildStatItem(
+                            //         icon: Icons.trending_up,
+                            //         iconColor: Colors.orange,
+                            //         label: 'Rate',
+                            //         value: '${stats.catchRate.round()}%',
+                            //       ),
+                            //     ),
+                            //   ],
+                            // ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+
+                      // Progression Card
+                      _buildProgressionCard(),
+                      const SizedBox(height: 40),
+
+                      // Game Mode Buttons
+                      Container(
+                        constraints: const BoxConstraints(maxWidth: 300),
+                        child: Column(
+                          children: [
+                            _buildGameButton(
+                              onPressed: onPlayAdventure,
+                              text: '🗺️ Word Hunt',
+                              textColor: theme.textColor,
+                              gradient: LinearGradient(
+                                colors: theme.primaryButtonGradient,
+                              ),
+                              icon: Icons.explore,
+                            ),
+                            const SizedBox(height: 20),
+                            _buildGameButton(
+                              onPressed: onShowWordDex,
+                              text: '📚 Word-Dex',
+                              textColor: theme.textColor,
+                              gradient: LinearGradient(
+                                colors: theme.secondaryButtonGradient,
+                              ),
+                              icon: Icons.book,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ]),
           ),
         ),
-      ],
-    );
+      )
+    ]);
   }
 
   Widget _buildProgressionCard() {

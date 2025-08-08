@@ -14,7 +14,18 @@ class AppInfoScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return GestureDetector(
+      // Add swipe-to-exit gesture
+      onHorizontalDragUpdate: (details) {
+        // Detect right swipe (positive delta)
+        if (details.delta.dx > 0) {
+          // Add some resistance by requiring minimum swipe distance
+          if (details.primaryDelta! > 8) {
+            onBack();
+          }
+        }
+      },
+      child: Scaffold(
       body: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -55,7 +66,7 @@ class AppInfoScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              
+
               // Content
               Expanded(
                 child: Container(
@@ -111,21 +122,22 @@ class AppInfoScreen extends StatelessWidget {
                           ],
                         ),
                       ),
-                      
+
                       const SizedBox(height: 32),
-                      
+
                       // Version Info
                       _buildInfoCard(
                         title: 'Version Information',
                         children: [
                           _buildInfoRow('Version', '1.0.1'),
                           _buildInfoRow('Build', '1'),
-                          _buildInfoRow('Platform', Theme.of(context).platform.name),
+                          _buildInfoRow(
+                              'Platform', Theme.of(context).platform.name),
                         ],
                       ),
-                      
+
                       const SizedBox(height: 24),
-                      
+
                       // About the Game
                       _buildInfoCard(
                         title: 'About the Game',
@@ -133,7 +145,8 @@ class AppInfoScreen extends StatelessWidget {
                           Text(
                             'Kliem is a Maltese word guessing game inspired by Wordle. '
                             'Discover and collect Maltese words while learning their meanings. '
-                            'Challenge yourself with different difficulty levels and build your WordDex collection!',
+                            'Challenge yourself with different difficulty levels and build your WordDex collection!'
+                            'Data collected and organised from Gabra.mt',
                             style: TextStyle(
                               fontSize: 16,
                               color: theme.textColor.withOpacity(0.8),
@@ -142,35 +155,40 @@ class AppInfoScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-                      
+
                       const SizedBox(height: 24),
-                      
+
                       // Features
                       _buildInfoCard(
                         title: 'Features',
                         children: [
-                          _buildFeatureItem('🎮', 'Adventure Mode', 'Progressive difficulty system'),
-                          _buildFeatureItem('📚', 'WordDex Collection', 'Save discovered words'),
-                          _buildFeatureItem('🎨', 'Multiple Themes', 'Customize your experience'),
-                          _buildFeatureItem('💾', 'Data Backup', 'Never lose your progress'),
-                          _buildFeatureItem('📊', 'Statistics', 'Track your performance'),
+                          _buildFeatureItem('🎮', 'Adventure Mode',
+                              'Progressive difficulty system'),
+                          _buildFeatureItem('📚', 'WordDex Collection',
+                              'Save discovered words'),
+                          _buildFeatureItem('🎨', 'Multiple Themes',
+                              'Customize your experience'),
+                          _buildFeatureItem(
+                              '💾', 'Data Backup', 'Never lose your progress'),
+                          _buildFeatureItem(
+                              '📊', 'Statistics', 'Track your performance'),
                         ],
                       ),
-                      
+
                       const SizedBox(height: 24),
-                      
+
                       // Developer Info
                       _buildInfoCard(
                         title: 'Developer',
                         children: [
-                          _buildInfoRow('Created by', 'Your Name Here'),
+                          _buildInfoRow('Created by', 'Sean Ellul'),
                           _buildInfoRow('Language', 'Maltese & English'),
                           _buildInfoRow('Framework', 'Flutter'),
                         ],
                       ),
-                      
+
                       const SizedBox(height: 24),
-                      
+
                       // Support
                       _buildInfoCard(
                         title: 'Support',
@@ -191,7 +209,8 @@ class AppInfoScreen extends StatelessWidget {
                             style: ElevatedButton.styleFrom(
                               backgroundColor: theme.primaryColor,
                               foregroundColor: Colors.white,
-                              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 12, horizontal: 24),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
                               ),
@@ -199,16 +218,18 @@ class AppInfoScreen extends StatelessWidget {
                           ),
                         ],
                       ),
-                      
+
                       const SizedBox(height: 24),
-                      
+
                       // Credits
                       _buildInfoCard(
                         title: 'Credits',
                         children: [
                           Text(
-                            'Special thanks to the Maltese language community and '
-                            'all the players who provide feedback to improve the game.',
+                            'Special thanks to the Maltese language community, especially Gabra.mt and '
+                            'all the players who provide feedback to improve the game. '
+                            'Special thanks to the developers of the original Wordle game, '
+                            'and sites like Kelma.mt.',
                             style: TextStyle(
                               fontSize: 16,
                               color: theme.textColor.withOpacity(0.8),
@@ -224,6 +245,7 @@ class AppInfoScreen extends StatelessWidget {
             ],
           ),
         ),
+      ),
       ),
     );
   }

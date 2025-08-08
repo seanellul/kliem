@@ -283,10 +283,7 @@ class _WordleGameScreenState extends State<WordleGameScreen> {
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [
-              widget.theme.primaryColor,
-              widget.theme.primaryColor.withOpacity(0.8),
-            ],
+            colors: widget.theme.backgroundGradient,
           ),
         ),
         child: SafeArea(
@@ -359,7 +356,7 @@ class _WordleGameScreenState extends State<WordleGameScreen> {
                                             color:
                                                 cell.state == LetterState.empty
                                                     ? widget.theme.textColor
-                                                    : Colors.white,
+                                                    : widget.theme.primaryColor,
                                           ),
                                         ),
                                       ),
@@ -445,7 +442,7 @@ class _WordleGameScreenState extends State<WordleGameScreen> {
                                               style: TextStyle(
                                                 fontSize: 15,
                                                 fontWeight: FontWeight.bold,
-                                                color: Colors.white,
+                                                color: widget.theme.textColor,
                                               ),
                                             ),
                                           ),
@@ -468,8 +465,8 @@ class _WordleGameScreenState extends State<WordleGameScreen> {
                           height: 45,
                           child: Material(
                             color: currentCol == 5
-                                ? const Color(0xFF22C55E)
-                                : const Color(0xFF6B7280),
+                                ? widget.theme.accentColor.withOpacity(0.8)
+                                : widget.theme.secondaryColor.withOpacity(0.3),
                             borderRadius: BorderRadius.circular(8),
                             child: InkWell(
                               onTap: currentCol == 5
@@ -482,7 +479,7 @@ class _WordleGameScreenState extends State<WordleGameScreen> {
                                   style: TextStyle(
                                     fontSize: 15,
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.white,
+                                    color: widget.theme.textColor,
                                   ),
                                 ),
                               ),

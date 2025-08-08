@@ -5,12 +5,14 @@ import 'screens/wordle_game_screen.dart';
 import 'screens/word_dex_screen.dart';
 import 'screens/end_condition_screen.dart';
 import 'screens/settings_screen.dart';
+import 'screens/how_to_play_screen.dart';
 import 'models/game_stats.dart';
 import 'models/theme_model.dart';
 import 'models/word_dex.dart';
 import 'utils/word_translations.dart';
 import 'utils/difficulty_manager.dart';
 import 'services/storage_service.dart';
+import 'services/onboarding_service.dart';
 
 void main() {
   runApp(const MalteseWordleApp());
@@ -42,12 +44,15 @@ class AppWrapper extends StatefulWidget {
 
 class _AppWrapperState extends State<AppWrapper> {
   GameMode gameMode = GameMode.menu;
+  GameMode? lastGameMode;
   String currentWord = '';
   bool showStyles = false;
   String currentTheme = 'default';
   GameStats stats = GameStats();
   WordDex wordDex = WordDex();
   late ThemeModel theme;
+  bool _shouldShowOnboarding = false;
+  bool _isCheckingOnboarding = true;
 
   // End condition data
   bool? lastGameWon;
@@ -57,7 +62,19 @@ class _AppWrapperState extends State<AppWrapper> {
   void initState() {
     super.initState();
     theme = ThemeModel.getTheme(currentTheme);
-    _loadSavedData();
+    _initializeApp();
+  }
+
+  Future<void> _initializeApp() async {
+    // Check if onboarding should be shown
+    final shouldShowOnboarding = !(await OnboardingService.hasCompletedOnboarding());
+    
+    setState(() {
+      _shouldShowOnboarding = shouldShowOnboarding;
+      _isCheckingOnboarding = false;
+    });
+    
+    await _loadSavedData();
   }
 
   Future<void> _loadSavedData() async {
@@ -100,24 +117,28 @@ class _AppWrapperState extends State<AppWrapper> {
       // Use the difficulty manager to get the next appropriate word
       currentWord =
           DifficultyManager.getNextWord(stats.caughtWords, stats.escapedWords);
+      lastGameMode = gameMode;
       gameMode = GameMode.adventure;
     });
   }
 
   void handleShowWordDex() {
     setState(() {
+      lastGameMode = gameMode;
       gameMode = GameMode.wordDex;
     });
   }
 
   void handleShowSettings() {
     setState(() {
+      lastGameMode = gameMode;
       gameMode = GameMode.settings;
     });
   }
 
   void handleBackToMenu() {
     setState(() {
+      lastGameMode = gameMode;
       gameMode = GameMode.menu;
     });
   }
@@ -144,6 +165,7 @@ class _AppWrapperState extends State<AppWrapper> {
     setState(() {
       lastGameWon = won;
       lastGameAttempts = attempts;
+      lastGameMode = gameMode;
       gameMode = GameMode.endCondition;
     });
 
@@ -158,10 +180,103 @@ class _AppWrapperState extends State<AppWrapper> {
     _saveTheme();
   }
 
+  void _completeOnboarding() async {
+    await OnboardingService.completeOnboarding();
+    setState(() {
+      _shouldShowOnboarding = false;
+    });
+  }
+
+  void _skipOnboarding() async {
+    await OnboardingService.completeOnboarding();
+    setState(() {
+      _shouldShowOnboarding = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    // Show loading screen while checking onboarding status
+    if (_isCheckingOnboarding) {
+      return MaterialApp(
+        home: Scaffold(
+          body: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  theme.primaryColor,
+                  theme.primaryColor.withOpacity(0.8),
+                  theme.primaryColor.withOpacity(0.6),
+                ],
+              ),
+            ),
+            child: const Center(
+              child: CircularProgressIndicator(color: Colors.white),
+            ),
+          ),
+        ),
+      );
+    }
+
+    // Show onboarding if needed
+    if (_shouldShowOnboarding) {
+      return MaterialApp(
+        home: HowToPlayScreen(
+          theme: theme,
+          showSkipButton: true,
+          onBack: _completeOnboarding,
+          onSkip: _skipOnboarding,
+          onStartTutorial: _completeOnboarding,
+        ),
+      );
+    }
+
+    return AnimatedSwitcher(
+      duration: const Duration(milliseconds: 300),
+      transitionBuilder: (Widget child, Animation<double> animation) {
+        // Different animations based on the game mode
+        if (child.key == const ValueKey('settings')) {
+          // Slide from right for settings
+          return SlideTransition(
+            position: Tween<Offset>(
+              begin: const Offset(1.0, 0.0),
+              end: Offset.zero,
+            ).animate(CurvedAnimation(
+              parent: animation,
+              curve: Curves.easeInOut,
+            )),
+            child: child,
+          );
+        } else if (child.key == const ValueKey('menu') && 
+                  lastGameMode == GameMode.settings) {
+          // Slide to right when returning from settings
+          return SlideTransition(
+            position: Tween<Offset>(
+              begin: const Offset(-1.0, 0.0),
+              end: Offset.zero,
+            ).animate(CurvedAnimation(
+              parent: animation,
+              curve: Curves.easeInOut,
+            )),
+            child: child,
+          );
+        }
+        // Default fade transition for other screens
+        return FadeTransition(opacity: animation, child: child);
+      },
+      child: _buildCurrentScreen(),
+    );
+  }
+
+  Widget _buildCurrentScreen() {
+    Widget screen;
+    String screenKey;
+    
     if (gameMode == GameMode.menu) {
-      return MainMenuScreen(
+      screenKey = 'menu';
+      screen = MainMenuScreen(
         onPlayAdventure: handlePlayAdventure,
         onShowWordDex: handleShowWordDex,
         onShowSettings: handleShowSettings,
@@ -170,14 +285,16 @@ class _AppWrapperState extends State<AppWrapper> {
         theme: theme,
       );
     } else if (gameMode == GameMode.wordDex) {
-      return WordDexScreen(
+      screenKey = 'wordDex';
+      screen = WordDexScreen(
         wordDex: wordDex,
         theme: theme,
         onBack: handleBackToMenu,
         stats: stats,
       );
     } else if (gameMode == GameMode.settings) {
-      return SettingsScreen(
+      screenKey = 'settings';
+      screen = SettingsScreen(
         theme: theme,
         currentTheme: currentTheme,
         onThemeSelect: handleThemeSelect,
@@ -185,7 +302,8 @@ class _AppWrapperState extends State<AppWrapper> {
         onBack: handleBackToMenu,
       );
     } else if (gameMode == GameMode.endCondition) {
-      return EndConditionScreen(
+      screenKey = 'endCondition';
+      screen = EndConditionScreen(
         won: lastGameWon!,
         word: currentWord,
         attempts: lastGameAttempts!,
@@ -193,13 +311,19 @@ class _AppWrapperState extends State<AppWrapper> {
         onBackToMenu: handleBackToMenu,
         wasPreviouslyEscaped: stats.hasEscapedWord(currentWord),
       );
+    } else {
+      screenKey = 'game';
+      screen = WordleGameScreen(
+        onBack: handleBackToMenu,
+        targetWord: currentWord,
+        onGameComplete: handleGameComplete,
+        theme: theme,
+      );
     }
 
-    return WordleGameScreen(
-      onBack: handleBackToMenu,
-      targetWord: currentWord,
-      onGameComplete: handleGameComplete,
-      theme: theme,
+    return KeyedSubtree(
+      key: ValueKey(screenKey),
+      child: screen,
     );
   }
 }

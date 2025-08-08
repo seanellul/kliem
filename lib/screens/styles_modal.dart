@@ -78,22 +78,13 @@ class StylesModal extends StatelessWidget {
 
                 // Footer
                 Padding(
-                  padding: const EdgeInsets.all(24),
+                  padding: const EdgeInsets.all(12),
                   child: Column(
                     children: [
                       const Text(
                         'Agħżel stil bbażat fuq il-kuluri tradizzjonali Maltin',
                         style: TextStyle(
                           fontSize: 14,
-                          color: Colors.grey,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 4),
-                      const Text(
-                        'Inkluż modi skuri b\'kuntrast għoli',
-                        style: TextStyle(
-                          fontSize: 12,
                           color: Colors.grey,
                         ),
                         textAlign: TextAlign.center,
