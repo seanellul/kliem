@@ -1,4 +1,4 @@
-# KELMA - Maltese Wordle Game
+# KLIEM - Maltese Wordle Game
 
 A beautiful Wordle game in Maltese, built with Flutter. This is a port of the React version with enhanced styling and functionality.
 
