@@ -8,8 +8,8 @@ import 'screens/end_condition_screen.dart';
 import 'models/game_stats.dart';
 import 'models/theme_model.dart';
 import 'models/word_dex.dart';
-import 'utils/maltese_words.dart';
 import 'utils/word_translations.dart';
+import 'utils/difficulty_manager.dart';
 
 void main() {
   runApp(const MalteseWordleApp());
@@ -117,19 +117,10 @@ class _AppWrapperState extends State<AppWrapper> {
 
   void handlePlayAdventure() {
     setState(() {
-      // Get a random word that hasn't been caught yet
-      final availableWords = MalteseWords.getWords()
-          .where((word) => !stats.hasCaughtWord(word))
-          .toList();
-
-      if (availableWords.isNotEmpty) {
-        currentWord = availableWords[
-            DateTime.now().millisecondsSinceEpoch % availableWords.length];
-        gameMode = GameMode.adventure;
-      } else {
-        // All words caught!
-        gameMode = GameMode.menu;
-      }
+      // Use the difficulty manager to get the next appropriate word
+      currentWord =
+          DifficultyManager.getNextWord(stats.caughtWords, stats.escapedWords);
+      gameMode = GameMode.adventure;
     });
   }
 

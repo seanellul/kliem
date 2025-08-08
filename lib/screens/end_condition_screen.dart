@@ -77,7 +77,7 @@ class EndConditionScreen extends StatelessWidget {
                     child: Column(
                       children: [
                         Text(
-                          word,
+                          word.toUpperCase(),
                           style: TextStyle(
                             fontSize: 28,
                             fontWeight: FontWeight.bold,

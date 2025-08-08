@@ -38,9 +38,9 @@ class _WordleGameScreenState extends State<WordleGameScreen> {
   Map<String, LetterState> keyboardState = {};
 
   final List<List<String>> malteseKeyboard = [
-    ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
+    ['Q', 'W', 'E', 'R', 'T', 'U', 'I', 'O', 'P'],
     ['A', 'S', 'D', 'F', 'G', 'Ġ', 'H', 'Ħ', 'J', 'K', 'L'],
-    ['Z', 'Ż', 'X', 'C', 'V', 'B', 'N', 'M', 'DELETE']
+    ['Z', 'Ż', 'X', 'Ċ', 'V', 'B', 'N', 'M', 'DELETE']
   ];
 
   @override
@@ -300,21 +300,21 @@ class _WordleGameScreenState extends State<WordleGameScreen> {
                   children: [
                     IconButton(
                       onPressed: widget.onBack,
-                      icon:
-                          Icon(Icons.arrow_back, color: widget.theme.textColor),
+                      icon: Icon(Icons.arrow_back,
+                          color: widget.theme.textColor, size: 24),
                     ),
-                    Text(
-                      'kelma.mt',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: widget.theme.textColor,
-                      ),
-                    ),
-                    IconButton(
-                      onPressed: resetGame,
-                      icon: Icon(Icons.refresh, color: widget.theme.textColor),
-                    ),
+                    // Text(
+                    //   'KLIEM',
+                    //   style: TextStyle(
+                    //     fontSize: 20,
+                    //     fontWeight: FontWeight.bold,
+                    //     color: widget.theme.textColor,
+                    //   ),
+                    // ),
+                    // IconButton(
+                    //   onPressed: resetGame,
+                    //   icon: Icon(Icons.refresh, color: widget.theme.textColor),
+                    // ),
                   ],
                 ),
                 const SizedBox(height: 24),

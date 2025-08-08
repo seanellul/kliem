@@ -1,6 +1,6 @@
 // Auto-generated translation data from Ġabra API
 // Generated on: 2025-07-28 14:53:56.470911
-// Total words: 2111
+// Total words: 1927 (cleaned - removed 98 words with 'translation': 'Unknown')
 // Found in API: 0
 // Not found: 0
 
@@ -366,11 +366,7 @@ class WordTranslations {
       ],
       'norm_freq': 3.9316878227512,
       'score': 1.1,
-    },
-    'ASGħAB': {
-      'translation': 'Unknown',
-    },
-    'ASTUŻ': {
+    },    'ASTUŻ': {
       'translation': 'shrewd',
       'phonetic': 'ɐstʊs',
       'pos': 'ADJ',
@@ -1706,11 +1702,7 @@ class WordTranslations {
       ],
       'norm_freq': 0.01604770539898449,
       'score': 1.1,
-    },
-    'BIRGU': {
-      'translation': 'Unknown',
-    },
-    'BIRRA': {
+    },    'BIRRA': {
       'translation': 'beer',
       'phonetic': 'bɪrrɐ',
       'pos': 'NOUN',
@@ -2502,11 +2494,7 @@ class WordTranslations {
       ],
       'norm_freq': 0.012035779049238369,
       'score': 1,
-    },
-    'BUSUF': {
-      'translation': 'Unknown',
-    },
-    'BXARA': {
+    },    'BXARA': {
       'translation': 'announcement of an event',
       'phonetic': 'pʃɐrɐ',
       'pos': 'NOUN',
@@ -2587,11 +2575,7 @@ class WordTranslations {
       ],
       'norm_freq': 63.829748224460815,
       'score': 1,
-    },
-    'CAĦAD': {
-      'translation': 'Unknown',
-    },
-    'DABRA': {
+    },    'DABRA': {
       'translation': 'patch',
       'phonetic': 'dɐbrɐ',
       'pos': 'NOUN',
@@ -2974,11 +2958,7 @@ class WordTranslations {
       ],
       'norm_freq': 0.10029815874365307,
       'score': 1.1,
-    },
-    'DAĦAQ': {
-      'translation': 'Unknown',
-    },
-    'DAĦLA': {
+    },    'DAĦLA': {
       'translation': 'entrance',
       'pos': 'NOUN',
       'root': 'd-ħ-l',
@@ -3731,11 +3711,7 @@ class WordTranslations {
       ],
       'norm_freq': 71.21169270799368,
       'score': 1.1,
-    },
-    'DIXXA': {
-      'translation': 'Unknown',
-    },
-    'DIeGħEM': {
+    },    'DIeGħEM': {
       'translation': 'to darken',
       'phonetic': 'dɪːjɛːm',
       'pos': 'VERB',
@@ -4193,11 +4169,7 @@ class WordTranslations {
       ],
       'norm_freq': 33.274917144794344,
       'score': 1.1,
-    },
-    'ETNIĊ': {
-      'translation': 'Unknown',
-    },
-    'EVITA': {
+    },    'EVITA': {
       'translation': 'to avoid',
       'phonetic': 'ɛvɪtɐ',
       'pos': 'VERB',
@@ -5144,11 +5116,7 @@ class WordTranslations {
       ],
       'norm_freq': 0,
       'score': 1,
-    },
-    'FGURA': {
-      'translation': 'Unknown',
-    },
-    'FHUMI': {
+    },    'FHUMI': {
       'translation': 'understandable',
       'phonetic': 'fʊmɪ',
       'pos': 'ADJ',
@@ -5492,11 +5460,7 @@ class WordTranslations {
       ],
       'norm_freq': 0,
       'score': 1.1,
-    },
-    'FIeRGħA': {
-      'translation': 'Unknown',
-    },
-    'FIeTEL': {
+    },    'FIeTEL': {
       'translation': 'warm',
       'phonetic': 'fɪːtɛl',
       'pos': 'ADJ',
@@ -6103,11 +6067,7 @@ class WordTranslations {
       ],
       'norm_freq': 0,
       'score': 1,
-    },
-    'GIBDA': {
-      'translation': 'Unknown',
-    },
-    'GIDEB': {
+    },    'GIDEB': {
       'translation': 'to lie',
       'phonetic': 'gɪdɛp',
       'pos': 'VERB',
@@ -6293,11 +6253,7 @@ class WordTranslations {
       ],
       'norm_freq': 458.16600106735694,
       'score': 1.1,
-    },
-    'GUDJA': {
-      'translation': 'Unknown',
-    },
-    'GVERN': {
+    },    'GVERN': {
       'translation': 'government',
       'phonetic': 'gvɛrn',
       'pos': 'NOUN',
@@ -6376,11 +6332,7 @@ class WordTranslations {
       ],
       'norm_freq': 0,
       'score': 1.1,
-    },
-    'GħABIR': {
-      'translation': 'Unknown',
-    },
-    'GħABRA': {
+    },    'GħABRA': {
       'translation': 'dust',
       'phonetic': 'ɐːbrɐ',
       'pos': 'NOUN',
@@ -6664,14 +6616,7 @@ class WordTranslations {
       ],
       'norm_freq': 1.6127943925979413,
       'score': 1.1,
-    },
-    'GħAJJA': {
-      'translation': 'Unknown',
-    },
-    'GħAKEM': {
-      'translation': 'Unknown',
-    },
-    'GħAKKA': {
+    },    'GħAKKA': {
       'translation':
           'expression indicating extreme old age (usually used with the adjective \'xiħ\')',
       'phonetic': 'ɐːkkɐ',
@@ -6752,11 +6697,7 @@ class WordTranslations {
       ],
       'norm_freq': 0,
       'score': 1.1,
-    },
-    'GħALIH': {
-      'translation': 'Unknown',
-    },
-    'GħALIK': {
+    },    'GħALIK': {
       'translation': 'stickiness',
       'phonetic': 'ɐːlɪk',
       'pos': 'NOUN',
@@ -6868,11 +6809,7 @@ class WordTranslations {
       ],
       'norm_freq': 0.22065594923603674,
       'score': 1.1,
-    },
-    'GħAMBA': {
-      'translation': 'Unknown',
-    },
-    'GħAMEL': {
+    },    'GħAMEL': {
       'translation': 'make',
       'phonetic': 'ɐːmɛl',
       'pos': 'VERB',
@@ -7593,11 +7530,7 @@ class WordTranslations {
       ],
       'norm_freq': 15.193165086488566,
       'score': 1.1,
-    },
-    'GħAWAR': {
-      'translation': 'Unknown',
-    },
-    'GħAWED': {
+    },    'GħAWED': {
       'translation': 'to change one\'s mind',
       'phonetic': 'ɐʊɛt',
       'pos': 'VERB',
@@ -7717,11 +7650,7 @@ class WordTranslations {
       ],
       'norm_freq': 0.361073371477151,
       'score': 1,
-    },
-    'GħAĠEM': {
-      'translation': 'Unknown',
-    },
-    'GħAĠEN': {
+    },    'GħAĠEN': {
       'translation': 'to knead (especially dough)',
       'phonetic': 'ɐːʤɛn',
       'pos': 'VERB',
@@ -7746,11 +7675,7 @@ class WordTranslations {
       ],
       'norm_freq': 0,
       'score': 1,
-    },
-    'GħAĠIB': {
-      'translation': 'Unknown',
-    },
-    'GħAĠIN': {
+    },    'GħAĠIN': {
       'translation': 'pasta',
       'phonetic': 'ɐːʤɪn',
       'pos': 'NOUN',
@@ -7907,11 +7832,7 @@ class WordTranslations {
       ],
       'norm_freq': 0.14844127494060655,
       'score': 1,
-    },
-    'GħEFEN': {
-      'translation': 'Unknown',
-    },
-    'GħEJJA': {
+    },    'GħEJJA': {
       'translation': 'to tire sb.',
       'phonetic': 'ɛɪjɐ',
       'pos': 'VERB',
@@ -7949,11 +7870,7 @@ class WordTranslations {
       ],
       'norm_freq': 0.0040119263497461225,
       'score': 1.1,
-    },
-    'GħELIB': {
-      'translation': 'Unknown',
-    },
-    'GħELLA': {
+    },    'GħELLA': {
       'translation': 'adversity',
       'phonetic': 'ɛːllɐ',
       'pos': 'NOUN',
@@ -8807,17 +8724,6 @@ class WordTranslations {
       'norm_freq': 185.40716432716732,
       'score': 1.1,
     },
-    'ISKOP': {
-      'translation': 'Unknown',
-      'phonetic': 'ɪskɔp',
-      'pos': 'NOUN',
-      'sources': ["Apertium2014"],
-      'norm_freq': 253.20871963787678,
-      'score': 1.1,
-    },
-    'ISKOT': {
-      'translation': 'Unknown',
-    },
     'ISLAM': {
       'translation': 'Islam',
       'phonetic': 'ɪslɐm',
@@ -8884,11 +8790,7 @@ class WordTranslations {
       ],
       'norm_freq': 68.21077179838358,
       'score': 1.1,
-    },
-    'ISĦAĦ': {
-      'translation': 'Unknown',
-    },
-    'ITTRA': {
+    },    'ITTRA': {
       'translation': 'letter',
       'phonetic': 'ɪttrɐ',
       'pos': 'NOUN',
@@ -8998,11 +8900,7 @@ class WordTranslations {
       ],
       'norm_freq': 2.848467708319747,
       'score': 1.1,
-    },
-    'JIKWI': {
-      'translation': 'Unknown',
-    },
-    'JISEM': {
+    },    'JISEM': {
       'translation': 'to be called',
       'phonetic': 'jɪsɛm',
       'pos': 'PRON',
@@ -9018,11 +8916,7 @@ class WordTranslations {
       ],
       'norm_freq': 0,
       'score': 1.1,
-    },
-    'JISMU': {
-      'translation': 'Unknown',
-    },
-    'KAFAR': {
+    },    'KAFAR': {
       'translation': 'to curse',
       'phonetic': 'kɐfɐr',
       'pos': 'VERB',
@@ -9034,11 +8928,7 @@ class WordTranslations {
       ],
       'norm_freq': 0.008023852699492245,
       'score': 1.1,
-    },
-    'KAGħAB': {
-      'translation': 'Unknown',
-    },
-    'KAGħBA': {
+    },    'KAGħBA': {
       'translation': 'a drawing room',
       'phonetic': 'kɐːbɐ',
       'pos': 'NOUN',
@@ -9084,11 +8974,7 @@ class WordTranslations {
       ],
       'norm_freq': 0.2487394336842596,
       'score': 1.1,
-    },
-    'KALIF': {
-      'translation': 'Unknown',
-    },
-    'KAMPA': {
+    },    'KAMPA': {
       'translation': 'to just about manage',
       'phonetic': 'kɐmpɐ',
       'pos': 'VERB',
@@ -9424,11 +9310,7 @@ class WordTranslations {
       ],
       'norm_freq': 0.10431008509339919,
       'score': 1.1,
-    },
-    'KEFFA': {
-      'translation': 'Unknown',
-    },
-    'KEFNA': {
+    },    'KEFNA': {
       'translation': 'the act of wrapping in a shroud',
       'phonetic': 'kɛfnɐ',
       'pos': 'NOUN',
@@ -10079,7 +9961,15 @@ class WordTranslations {
       'score': 1.1,
     },
     'KORAN': {
-      'translation': 'Unknown',
+      'translation': 'Quran',
+      'pos': 'NOUN',
+      'sources': [],
+      'glosses': [
+        {"gloss": "Quran", "examples": []},
+        {"gloss": "Koran", "examples": []}
+      ],
+      'norm_freq': 1.0,
+      'score': 6.0,
     },
     'KORDA': {
       'translation': 'cord',
@@ -11008,11 +10898,7 @@ class WordTranslations {
       ],
       'norm_freq': 0.06419082159593796,
       'score': 1.1,
-    },
-    'LIBJA': {
-      'translation': 'Unknown',
-    },
-    'LIBSA': {
+    },    'LIBSA': {
       'translation': 'dress',
       'phonetic': 'lɪpsɐ',
       'pos': 'NOUN',
@@ -11033,11 +10919,7 @@ class WordTranslations {
       ],
       'norm_freq': 15.397773330325618,
       'score': 1.1,
-    },
-    'LILNA': {
-      'translation': 'Unknown',
-    },
-    'LIMJA': {
+    },    'LIMJA': {
       'translation': 'a glimmer',
       'phonetic': 'lɪmjɐ',
       'pos': 'NOUN',
@@ -11664,11 +11546,7 @@ class WordTranslations {
       ],
       'norm_freq': 8.509295787811526,
       'score': 1.1,
-    },
-    'MARFA': {
-      'translation': 'Unknown',
-    },
-    'MARID': {
+    },    'MARID': {
       'translation': 'sick',
       'phonetic': 'mɐrɪt',
       'pos': 'ADJ',
@@ -11711,11 +11589,7 @@ class WordTranslations {
       ],
       'norm_freq': 71.60084956391906,
       'score': 1.1,
-    },
-    'MARSA': {
-      'translation': 'Unknown',
-    },
-    'MARZU': {
+    },    'MARZU': {
       'translation': 'March',
       'phonetic': 'mɐrtsʊ',
       'pos': 'PROPN',
@@ -11745,11 +11619,7 @@ class WordTranslations {
       ],
       'norm_freq': 50.99158390527322,
       'score': 1.1,
-    },
-    'MASĦA': {
-      'translation': 'Unknown',
-    },
-    'MATAL': {
+    },    'MATAL': {
       'translation': 'to justify failure to pay on time',
       'phonetic': 'mɐtɐl',
       'pos': 'VERB',
@@ -12303,11 +12173,7 @@ class WordTranslations {
       ],
       'norm_freq': 132.71452364960174,
       'score': 1.1,
-    },
-    'MEWTA': {
-      'translation': 'Unknown',
-    },
-    'MEWĠI': {
+    },    'MEWĠI': {
       'translation': 'wavy',
       'phonetic': 'mɛʊʤɪ',
       'pos': 'ADJ',
@@ -12485,11 +12351,7 @@ class WordTranslations {
       ],
       'norm_freq': 107.51160232049659,
       'score': 1.1,
-    },
-    'MILWA': {
-      'translation': 'Unknown',
-    },
-    'MINDU': {
+    },    'MINDU': {
       'translation': 'since',
       'phonetic': 'mɪndʊ',
       'sources': ["Falzon2013"],
@@ -13018,14 +12880,7 @@ class WordTranslations {
       ],
       'norm_freq': 4.601679523158802,
       'score': 1.1,
-    },
-    'MOSTA': {
-      'translation': 'Unknown',
-    },
-    'MOTWA': {
-      'translation': 'Unknown',
-    },
-    'MOĦBA': {
+    },    'MOĦBA': {
       'translation': 'hiding place',
       'phonetic': 'mɔhbɐ',
       'pos': 'NOUN',
@@ -13195,11 +13050,7 @@ class WordTranslations {
       ],
       'norm_freq': 33.55575198927657,
       'score': 1.1,
-    },
-    'MUSAN': {
-      'translation': 'Unknown',
-    },
-    'MUTUR': {
+    },    'MUTUR': {
       'translation': 'motor',
       'phonetic': 'mʊtʊr',
       'pos': 'NOUN',
@@ -13364,14 +13215,7 @@ class WordTranslations {
       ],
       'norm_freq': 0,
       'score': 1,
-    },
-    'NABAR': {
-      'translation': 'Unknown',
-    },
-    'NABBA': {
-      'translation': 'Unknown',
-    },
-    'NADAR': {
+    },    'NADAR': {
       'translation': 'to watch',
       'phonetic': 'nɐdɐr',
       'pos': 'VERB',
@@ -13384,14 +13228,7 @@ class WordTranslations {
       ],
       'norm_freq': 0,
       'score': 1.1,
-    },
-    'NADAĦ': {
-      'translation': 'Unknown',
-    },
-    'NADFA': {
-      'translation': 'Unknown',
-    },
-    'NADIF': {
+    },    'NADIF': {
       'translation': 'clean',
       'phonetic': 'nɐdɪf',
       'pos': 'ADJ',
@@ -13437,11 +13274,7 @@ class WordTranslations {
       ],
       'norm_freq': 0.008023852699492245,
       'score': 1.1,
-    },
-    'NADUR': {
-      'translation': 'Unknown',
-    },
-    'NAFAD': {
+    },    'NAFAD': {
       'translation': 'to rinse clothes',
       'phonetic': 'nɐfɐt',
       'pos': 'VERB',
@@ -13601,14 +13434,7 @@ class WordTranslations {
       ],
       'norm_freq': 0,
       'score': 1,
-    },
-    'NAHAD': {
-      'translation': 'Unknown',
-    },
-    'NAHAR': {
-      'translation': 'Unknown',
-    },
-    'NAMRA': {
+    },    'NAMRA': {
       'translation': 'hobby',
       'phonetic': 'nɐmrɐ',
       'pos': 'NOUN',
@@ -13965,11 +13791,7 @@ class WordTranslations {
       ],
       'norm_freq': 7.233503208592259,
       'score': 1.1,
-    },
-    'NATAQ': {
-      'translation': 'Unknown',
-    },
-    'NATĦA': {
+    },    'NATĦA': {
       'translation': 'head-butt',
       'phonetic': 'nɐthɐ',
       'pos': 'NOUN',
@@ -13980,11 +13802,7 @@ class WordTranslations {
       ],
       'norm_freq': 0,
       'score': 1.1,
-    },
-    'NAWNU': {
-      'translation': 'Unknown',
-    },
-    'NAXAR': {
+    },    'NAXAR': {
       'translation': 'to hang (especially clothes in order to dry them)',
       'phonetic': 'nɐʃɐr',
       'pos': 'VERB',
@@ -14331,11 +14149,7 @@ class WordTranslations {
       ],
       'norm_freq': 1.3199237690664745,
       'score': 1.1,
-    },
-    'NEDDA': {
-      'translation': 'Unknown',
-    },
-    'NEFAQ': {
+    },    'NEFAQ': {
       'translation': 'to spend',
       'phonetic': 'nɛfɐʔ',
       'pos': 'VERB',
@@ -14641,11 +14455,7 @@ class WordTranslations {
       ],
       'norm_freq': 106.60089503910423,
       'score': 1.1,
-    },
-    'NEŻŻA': {
-      'translation': 'Unknown',
-    },
-    'NFADA': {
+    },    'NFADA': {
       'translation': 'to be trusted',
       'phonetic': 'nfɐdɐ',
       'pos': 'VERB',
@@ -14884,11 +14694,7 @@ class WordTranslations {
       ],
       'norm_freq': 0.07622660064517633,
       'score': 1.1,
-    },
-    'NIDEH': {
-      'translation': 'Unknown',
-    },
-    'NIDEM': {
+    },    'NIDEM': {
       'translation': 'to repent',
       'phonetic': 'nɪdɛm',
       'pos': 'VERB',
@@ -14901,11 +14707,7 @@ class WordTranslations {
       ],
       'norm_freq': 1.175494420475614,
       'score': 1.1,
-    },
-    'NIDER': {
-      'translation': 'Unknown',
-    },
-    'NIDJA': {
+    },    'NIDJA': {
       'translation': 'a drop of dew',
       'phonetic': 'nɪdjɐ',
       'pos': 'NOUN',
@@ -15255,11 +15057,7 @@ class WordTranslations {
       ],
       'norm_freq': 0.1604770539898449,
       'score': 1.1,
-    },
-    'NIeGħEL': {
-      'translation': 'Unknown',
-    },
-    'NIeGħEM': {
+    },    'NIeGħEM': {
       'translation': 'to speak pleasantly',
       'phonetic': 'nɪːjɛːm',
       'pos': 'VERB',
@@ -17412,11 +17210,7 @@ class WordTranslations {
       ],
       'norm_freq': 0,
       'score': 1.1,
-    },
-    'QADAĦ': {
-      'translation': 'Unknown',
-    },
-    'QADEF': {
+    },    'QADEF': {
       'translation': 'to row',
       'phonetic': 'ʔɐdɛf',
       'pos': 'VERB',
@@ -18099,11 +17893,7 @@ class WordTranslations {
       ],
       'norm_freq': 5.921603292225277,
       'score': 1.1,
-    },
-    'QARSU': {
-      'translation': 'Unknown',
-    },
-    'QARĦA': {
+    },    'QARĦA': {
       'translation': 'a wound caused by scratching the skin',
       'phonetic': 'ʔɐrhɐ',
       'pos': 'NOUN',
@@ -18611,11 +18401,7 @@ class WordTranslations {
       ],
       'norm_freq': 3.2496603432943596,
       'score': 1.1,
-    },
-    'QEGħIeD': {
-      'translation': 'Unknown',
-    },
-    'QELEQ': {
+    },    'QELEQ': {
       'translation': 'to be restless',
       'phonetic': 'ʔɛlɛʔ',
       'pos': 'VERB',
@@ -18733,11 +18519,7 @@ class WordTranslations {
       ],
       'norm_freq': 1953.439035102185,
       'score': 1.1,
-    },
-    'QIeTGħA': {
-      'translation': 'Unknown',
-    },
-    'QLIBA': {
+    },    'QLIBA': {
       'translation': 'a wrestling match',
       'phonetic': 'ʔlɪbɐ',
       'pos': 'NOUN',
@@ -19121,20 +18903,7 @@ class WordTranslations {
       ],
       'norm_freq': 0,
       'score': 1,
-    },
-    'QOŻŻU': {
-      'translation': 'Unknown',
-    },
-    'QRAJQ': {
-      'translation': 'Unknown',
-    },
-    'QRIBA': {
-      'translation': 'Unknown',
-    },
-    'QROQQ': {
-      'translation': 'Unknown',
-    },
-    'QRUNA': {
+    },    'QRUNA': {
       'translation': 'external corner (e.g. of a sack, of a building)',
       'phonetic': 'ʔrʊnɐ',
       'pos': 'NOUN',
@@ -19175,11 +18944,7 @@ class WordTranslations {
       ],
       'norm_freq': 1.1474109360273912,
       'score': 1.1,
-    },
-    'QSIMA': {
-      'translation': 'Unknown',
-    },
-    'QSUSI': {
+    },    'QSUSI': {
       'translation': 'having to do with the priesthood',
       'phonetic': 'ʔsʊsɪ',
       'pos': 'ADJ',
@@ -19383,11 +19148,7 @@ class WordTranslations {
       ],
       'norm_freq': 5.520410657250665,
       'score': 1.1,
-    },
-    'RAGħDA': {
-      'translation': 'Unknown',
-    },
-    'RAGħWA': {
+    },    'RAGħWA': {
       'translation': 'foam',
       'phonetic': 'rɐːkhwɐ',
       'pos': 'NOUN',
@@ -19566,11 +19327,7 @@ class WordTranslations {
       ],
       'norm_freq': 0.0040119263497461225,
       'score': 1.1,
-    },
-    'RAQQA': {
-      'translation': 'Unknown',
-    },
-    'RASSA': {
+    },    'RASSA': {
       'translation': 'crowd',
       'phonetic': 'rɐssɐ',
       'pos': 'NOUN',
@@ -20721,11 +20478,7 @@ class WordTranslations {
       ],
       'norm_freq': 0.2487394336842596,
       'score': 1.1,
-    },
-    'SAFAL': {
-      'translation': 'Unknown',
-    },
-    'SAFAR': {
+    },    'SAFAR': {
       'translation': 'travel',
       'phonetic': 'sɐfɐr',
       'pos': 'NOUN',
@@ -20840,11 +20593,7 @@ class WordTranslations {
       ],
       'norm_freq': 0.01604770539898449,
       'score': 1.1,
-    },
-    'SAGħAQ': {
-      'translation': 'Unknown',
-    },
-    'SAGħQA': {
+    },    'SAGħQA': {
       'translation': 'a flash of lightning',
       'phonetic': 'sɐːʔɐ',
       'pos': 'NOUN',
@@ -20855,11 +20604,7 @@ class WordTranslations {
       ],
       'norm_freq': 0,
       'score': 1.1,
-    },
-    'SAHAR': {
-      'translation': 'Unknown',
-    },
-    'SAHRA': {
+    },    'SAHRA': {
       'translation': 'vigil',
       'phonetic': 'sɐːrɐ',
       'pos': 'NOUN',
@@ -20880,11 +20625,7 @@ class WordTranslations {
       ],
       'norm_freq': 17.72469061317837,
       'score': 1.1,
-    },
-    'SAJRA': {
-      'translation': 'Unknown',
-    },
-    'SAKRA': {
+    },    'SAKRA': {
       'translation': 'drunkenness',
       'phonetic': 'sɐkrɐ',
       'pos': 'NOUN',
@@ -20917,11 +20658,7 @@ class WordTranslations {
       ],
       'norm_freq': 0.052155042546699594,
       'score': 1.1,
-    },
-    'SALAT': {
-      'translation': 'Unknown',
-    },
-    'SALBA': {
+    },    'SALBA': {
       'translation': 'an event of crucifixion',
       'phonetic': 'sɐlbɐ',
       'pos': 'NOUN',
@@ -21019,11 +20756,7 @@ class WordTranslations {
       ],
       'norm_freq': 0.11233393779289144,
       'score': 1.1,
-    },
-    'SAMRA': {
-      'translation': 'Unknown',
-    },
-    'SAMTA': {
+    },    'SAMTA': {
       'translation': 'scalding',
       'phonetic': 'sɐmtɐ',
       'pos': 'NOUN',
@@ -21997,11 +21730,7 @@ class WordTranslations {
       ],
       'norm_freq': 0,
       'score': 1.1,
-    },
-    'SENAGħ': {
-      'translation': 'Unknown',
-    },
-    'SENGħA': {
+    },    'SENGħA': {
       'translation': 'craft',
       'phonetic': 'sɛnɐː',
       'pos': 'NOUN',
@@ -22122,11 +21851,7 @@ class WordTranslations {
       ],
       'norm_freq': 205.3263786536568,
       'score': 1.1,
-    },
-    'SERPA': {
-      'translation': 'Unknown',
-    },
-    'SERPI': {
+    },    'SERPI': {
       'translation': 'snaky',
       'phonetic': 'sɛrpɪ',
       'pos': 'ADJ',
@@ -22196,11 +21921,7 @@ class WordTranslations {
       ],
       'norm_freq': 116.42610266963248,
       'score': 1.1,
-    },
-    'SERVU': {
-      'translation': 'Unknown',
-    },
-    'SETAĦ': {
+    },    'SETAĦ': {
       'translation': 'an unroofed passage between rooms',
       'phonetic': 'sɛtɐh',
       'pos': 'NOUN',
@@ -22329,11 +22050,7 @@ class WordTranslations {
       ],
       'norm_freq': 196.98959569888436,
       'score': 1.1,
-    },
-    'SEĦEL': {
-      'translation': 'Unknown',
-    },
-    'SEĦER': {
+    },    'SEĦER': {
       'translation': 'charm',
       'phonetic': 'sɛhɛr',
       'pos': 'VERB',
@@ -22465,11 +22182,7 @@ class WordTranslations {
       ],
       'norm_freq': 0.2728109917827363,
       'score': 1.1,
-    },
-    'SIBER': {
-      'translation': 'Unknown',
-    },
-    'SIBJA': {
+    },    'SIBJA': {
       'translation': 'looting',
       'phonetic': 'sɪbjɐ',
       'pos': 'NOUN',
@@ -22480,14 +22193,7 @@ class WordTranslations {
       ],
       'norm_freq': 0,
       'score': 1.1,
-    },
-    'SIBKA': {
-      'translation': 'Unknown',
-    },
-    'SIBLA': {
-      'translation': 'Unknown',
-    },
-    'SIDER': {
+    },    'SIDER': {
       'translation': 'chest',
       'phonetic': 'sɪdɛr',
       'pos': 'NOUN',
@@ -23008,11 +22714,7 @@ class WordTranslations {
       ],
       'norm_freq': 35.80644267148414,
       'score': 1.1,
-    },
-    'SIeHEM': {
-      'translation': 'Unknown',
-    },
-    'SIeQJA': {
+    },    'SIeQJA': {
       'translation': 'water channel',
       'phonetic': 'sɪːʔjɐ',
       'pos': 'NOUN',
@@ -23284,11 +22986,7 @@ class WordTranslations {
       ],
       'norm_freq': 44.72896687331952,
       'score': 1,
-    },
-    'SKUŻI': {
-      'translation': 'Unknown',
-    },
-    'SLIeMA': {
+    },    'SLIeMA': {
       'translation': 'peace',
       'phonetic': 'slɪːmɐ',
       'pos': 'NOUN',
@@ -23575,11 +23273,7 @@ class WordTranslations {
       ],
       'norm_freq': 2.5957163482857415,
       'score': 1.1,
-    },
-    'SOROF': {
-      'translation': 'Unknown',
-    },
-    'SORRA': {
+    },    'SORRA': {
       'translation': 'a bundle',
       'phonetic': 'sɔrrɐ',
       'pos': 'NOUN',
@@ -23820,11 +23514,7 @@ class WordTranslations {
       ],
       'norm_freq': 0.44933575117156577,
       'score': 1.1,
-    },
-    'STRIeĦ': {
-      'translation': 'Unknown',
-    },
-    'SĦABA': {
+    },    'SĦABA': {
       'translation': 'cloud',
       'phonetic': 'shɐbɐ',
       'pos': 'NOUN',
@@ -24005,11 +23695,7 @@ class WordTranslations {
       ],
       'norm_freq': 0.020059631748730614,
       'score': 1.1,
-    },
-    'TAGħHA': {
-      'translation': 'Unknown',
-    },
-    'TAGħNA': {
+    },    'TAGħNA': {
       'translation': 'a stabbing with a dagger',
       'phonetic': 'tɐːnɐ',
       'pos': 'NOUN',
@@ -24124,11 +23810,7 @@ class WordTranslations {
       ],
       'norm_freq': 566.5000482895515,
       'score': 1.1,
-    },
-    'TAMES': {
-      'translation': 'Unknown',
-    },
-    'TAMIM': {
+    },    'TAMIM': {
       'translation': 'perfect',
       'phonetic': 'tɐmɪm',
       'pos': 'ADJ',
@@ -24716,11 +24398,7 @@ class WordTranslations {
       ],
       'norm_freq': 1.8856053843806777,
       'score': 1.1,
-    },
-    'TEGħIB': {
-      'translation': 'Unknown',
-    },
-    'TEKIL': {
+    },    'TEKIL': {
       'translation': 'hope',
       'phonetic': 'tɛkɪl',
       'pos': 'NOUN',
@@ -24911,11 +24589,7 @@ class WordTranslations {
       ],
       'norm_freq': 0.16448898033959103,
       'score': 1.1,
-    },
-    'TERQA': {
-      'translation': 'Unknown',
-    },
-    'TERRA': {
+    },    'TERRA': {
       'translation': 'talcum powder',
       'phonetic': 'tɛrrɐ',
       'pos': 'NOUN',
@@ -25370,11 +25044,7 @@ class WordTranslations {
       ],
       'norm_freq': 0,
       'score': 1.1,
-    },
-    'TIeGħEK': {
-      'translation': 'Unknown',
-    },
-    'TIeGħEM': {
+    },    'TIeGħEM': {
       'translation': 'to taste',
       'phonetic': 'tɪːjɛːm',
       'pos': 'VERB',
@@ -25446,11 +25116,7 @@ class WordTranslations {
       ],
       'norm_freq': 9.61257553399171,
       'score': 1,
-    },
-    'TKIeWA': {
-      'translation': 'Unknown',
-    },
-    'TLIeTA': {
+    },    'TLIeTA': {
       'translation': 'three',
       'phonetic': 'tlɪːtɐ',
       'pos': 'NUM',
@@ -28609,11 +28275,7 @@ class WordTranslations {
       ],
       'norm_freq': 443.2456469726511,
       'score': 1.1,
-    },
-    'XOXXA': {
-      'translation': 'Unknown',
-    },
-    'XTARA': {
+    },    'XTARA': {
       'translation': 'to buy',
       'phonetic': 'ʃtɐrɐ',
       'pos': 'VERB',
@@ -28719,14 +28381,7 @@ class WordTranslations {
       ],
       'norm_freq': 6.041961082717661,
       'score': 1.1,
-    },
-    'ZEJDA': {
-      'translation': 'Unknown',
-    },
-    'ZIKKA': {
-      'translation': 'Unknown',
-    },
-    'ZZIKA': {
+    },    'ZZIKA': {
       'translation': 'to irritate',
       'phonetic': 'tstsɪkɐ',
       'pos': 'VERB',
@@ -30336,11 +29991,7 @@ class WordTranslations {
       ],
       'norm_freq': 38.394135167070395,
       'score': 1.1,
-    },
-    'ĦADIT': {
-      'translation': 'Unknown',
-    },
-    'ĦADRA': {
+    },    'ĦADRA': {
       'translation': 'a wedding party',
       'phonetic': 'hɐdrɐ',
       'pos': 'NOUN',
@@ -30688,11 +30339,7 @@ class WordTranslations {
       ],
       'norm_freq': 522.513287790935,
       'score': 1.1,
-    },
-    'ĦAMEŻ': {
-      'translation': 'Unknown',
-    },
-    'ĦAMRI': {
+    },    'ĦAMRI': {
       'translation': 'reddish',
       'phonetic': 'hɐmrɪ',
       'pos': 'ADJ',
@@ -31371,11 +31018,7 @@ class WordTranslations {
       ],
       'norm_freq': 1.6168063189476873,
       'score': 1.1,
-    },
-    'ĦAXEM': {
-      'translation': 'Unknown',
-    },
-    'ĦAXIX': {
+    },    'ĦAXIX': {
       'translation': 'grass',
       'phonetic': 'hɐʃɪʃ',
       'pos': 'NOUN',
@@ -31621,11 +31264,7 @@ class WordTranslations {
       ],
       'norm_freq': 6.459201423091257,
       'score': 1.1,
-    },
-    'ĦEBBA': {
-      'translation': 'Unknown',
-    },
-    'ĦEBEL': {
+    },    'ĦEBEL': {
       'translation': 'to go mad',
       'phonetic': 'hɛbɛl',
       'pos': 'VERB',
@@ -31840,11 +31479,7 @@ class WordTranslations {
       ],
       'norm_freq': 12.32463774642009,
       'score': 1.1,
-    },
-    'ĦESER': {
-      'translation': 'Unknown',
-    },
-    'ĦEXBA': {
+    },    'ĦEXBA': {
       'translation': 'a beam or lever',
       'phonetic': 'hɛʒbɐ',
       'pos': 'NOUN',
@@ -32249,11 +31884,7 @@ class WordTranslations {
       ],
       'norm_freq': 18.964375855249923,
       'score': 1.1,
-    },
-    'ĦOLOQ': {
-      'translation': 'Unknown',
-    },
-    'ĦOLQA': {
+    },    'ĦOLQA': {
       'translation': 'link',
       'phonetic': 'hɔlʔɐ',
       'pos': 'NOUN',
@@ -32774,11 +32405,7 @@ class WordTranslations {
       ],
       'norm_freq': 34.979985843436445,
       'score': 1,
-    },
-    'ŻANAK': {
-      'translation': 'Unknown',
-    },
-    'ŻANIK': {
+    },    'ŻANIK': {
       'translation': 'cavorting',
       'phonetic': 'zɐnɪk',
       'pos': 'NOUN',
@@ -33115,11 +32742,7 @@ class WordTranslations {
       ],
       'norm_freq': 0,
       'score': 1,
-    },
-    'ŻEJDA': {
-      'translation': 'Unknown',
-    },
-    'ŻEJTI': {
+    },    'ŻEJTI': {
       'translation': 'oily',
       'phonetic': 'zɛɪtɪ',
       'pos': 'ADJ',

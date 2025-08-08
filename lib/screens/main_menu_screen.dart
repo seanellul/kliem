@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/game_stats.dart';
 import '../models/theme_model.dart';
 import '../models/word_dex.dart';
+import '../utils/difficulty_manager.dart';
 import 'styles_modal.dart';
 
 class MainMenuScreen extends StatelessWidget {
@@ -105,19 +106,14 @@ class MainMenuScreen extends StatelessWidget {
                                   value: stats.wordsCaught.toString(),
                                 ),
                               ),
-                              Expanded(
-                                child: _buildStatItem(
-                                  icon: Icons.cancel,
-                                  iconColor: Colors.red,
-                                  label: 'Escaped',
-                                  value: stats.wordsEscaped.toString(),
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 16),
-                          Row(
-                            children: [
+                              // Expanded(
+                              //   child: _buildStatItem(
+                              //     icon: Icons.cancel,
+                              //     iconColor: Colors.red,
+                              //     label: 'Escaped',
+                              //     value: stats.wordsEscaped.toString(),
+                              //   ),
+                              // ),
                               Expanded(
                                 child: _buildStatItem(
                                   icon: Icons.book,
@@ -126,19 +122,29 @@ class MainMenuScreen extends StatelessWidget {
                                   value: stats.wordsLeft.toString(),
                                 ),
                               ),
-                              Expanded(
-                                child: _buildStatItem(
-                                  icon: Icons.trending_up,
-                                  iconColor: Colors.orange,
-                                  label: 'Rate',
-                                  value: '${stats.catchRate.round()}%',
-                                ),
-                              ),
                             ],
                           ),
+                          // const SizedBox(height: 16),
+                          // Row(
+                          //   children: [
+
+                          //     Expanded(
+                          //       child: _buildStatItem(
+                          //         icon: Icons.trending_up,
+                          //         iconColor: Colors.orange,
+                          //         label: 'Rate',
+                          //         value: '${stats.catchRate.round()}%',
+                          //       ),
+                          //     ),
+                          //   ],
+                          // ),
                         ],
                       ),
                     ),
+                    const SizedBox(height: 16),
+
+                    // Progression Card
+                    _buildProgressionCard(),
                     const SizedBox(height: 32),
 
                     // Game Mode Buttons
@@ -197,6 +203,91 @@ class MainMenuScreen extends StatelessWidget {
             onThemeSelect: onThemeSelect,
           ),
       ],
+    );
+  }
+
+  Widget _buildProgressionCard() {
+    final totalWordsAttempted = stats.totalWords;
+    final difficultyDescription =
+        DifficultyManager.getDifficultyDescription(totalWordsAttempted);
+    final phaseProgress =
+        DifficultyManager.getPhaseProgress(totalWordsAttempted);
+    final wordsRemaining =
+        DifficultyManager.getWordsRemainingInPhase(totalWordsAttempted);
+
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: theme.surfaceColor,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.white.withValues(alpha: 0.2)),
+      ),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Icon(
+                Icons.trending_up,
+                color: theme.accentColor,
+                size: 20,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                'Progression',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: theme.textColor,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      difficultyDescription,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: theme.textColor,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    if (wordsRemaining > 0)
+                      Text(
+                        '$wordsRemaining words to next level',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: theme.textSecondaryColor,
+                        ),
+                      )
+                    else
+                      Text(
+                        'Expert level unlocked!',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: theme.accentColor,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+              CircularProgressIndicator(
+                value: phaseProgress.clamp(0.0, 1.0),
+                backgroundColor: Colors.white.withValues(alpha: 0.2),
+                valueColor: AlwaysStoppedAnimation<Color>(theme.accentColor),
+                strokeWidth: 4,
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 

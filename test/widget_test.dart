@@ -8,7 +8,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:werdil/main.dart';
+import 'package:kliem/main.dart';
 
 void main() {
   testWidgets('Maltese Wordle app smoke test', (WidgetTester tester) async {
