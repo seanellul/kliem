@@ -72,36 +72,69 @@ class _WordDexScreenState extends State<WordDexScreen> {
                 ),
               ),
 
-              // Stats Card
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 16),
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: widget.theme.surfaceColor,
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: Colors.white.withOpacity(0.2)),
-                ),
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        _buildStatItem('Caught', '${widget.wordDex.totalWords}',
-                            Icons.check_circle, Colors.green),
-                        _buildStatItem(
-                            'Progress',
-                            '${((widget.wordDex.totalWords / 2111) * 100).round()}%',
-                            Icons.trending_up,
-                            Colors.orange),
-                      ],
-                    ),
-                    if (widget.wordDex.totalWords > 0) ...[
-                      const SizedBox(height: 12),
-                      _buildRaritySummary(),
+              // Stats Card (aligned and animated)
+              Builder(builder: (context) {
+                // Compute rarity data
+                final rarityCounts = <int, int>{};
+                for (final entry in widget.wordDex.allEntries) {
+                  if (entry.rarity != null) {
+                    rarityCounts[entry.rarity!] =
+                        (rarityCounts[entry.rarity!] ?? 0) + 1;
+                  }
+                }
+                int? rarestRarity;
+                if (rarityCounts.isNotEmpty) {
+                  rarestRarity =
+                      rarityCounts.keys.reduce((a, b) => a > b ? a : b);
+                }
+
+                final totalCaught = widget.wordDex.totalWords;
+                final progressPct =
+                    ((totalCaught / 2111) * 100).clamp(0, 100).round();
+                final rarityLevels = rarityCounts.length;
+
+                return Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 16),
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: widget.theme.surfaceColor,
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: Colors.white.withOpacity(0.2)),
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: _buildSummaryStat(
+                          icon: Icons.check_circle,
+                          iconColor: Colors.green,
+                          label: 'Caught',
+                          value: totalCaught.toDouble(),
+                          format: (v) => v.toInt().toString(),
+                          extra: rarestRarity != null
+                              ? _rarityChip(
+                                  'Rarest: ' +
+                                      WordTranslations.getRarityName(
+                                          rarestRarity),
+                                  WordTranslations.getRarityColor(rarestRarity))
+                              : _infoPill('No words yet'),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: _buildSummaryStat(
+                          icon: Icons.trending_up,
+                          iconColor: Colors.orange,
+                          label: 'Progress',
+                          value: progressPct.toDouble(),
+                          format: (v) => '${v.toInt()}%',
+                          extra: _infoPill(
+                              '$rarityLevels rarity level${rarityLevels == 1 ? '' : 's'}'),
+                        ),
+                      ),
                     ],
-                  ],
-                ),
-              ),
+                  ),
+                );
+              }),
 
               const SizedBox(height: 16),
 
@@ -141,116 +174,7 @@ class _WordDexScreenState extends State<WordDexScreen> {
                         itemCount: _getSortedEntries().length,
                         itemBuilder: (context, index) {
                           final entry = _getSortedEntries()[index];
-                          return Container(
-                            margin: const EdgeInsets.only(bottom: 8),
-                            decoration: BoxDecoration(
-                              color: widget.theme.surfaceColor,
-                              borderRadius: BorderRadius.circular(8),
-                              border: Border.all(
-                                  color: Colors.white.withOpacity(0.1)),
-                            ),
-                            child: InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => WordDexDetailScreen(
-                                      entry: entry,
-                                      theme: widget.theme,
-                                      onBack: () => Navigator.pop(context),
-                                      stats: widget.stats,
-                                    ),
-                                  ),
-                                );
-                              },
-                              child: ListTile(
-                                title: Text(
-                                  MalteseDigraphs.formatForDisplay(
-                                      entry.malteseWord),
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: widget.theme.textColor,
-                                  ),
-                                ),
-                                subtitle: Text(
-                                  entry.englishTranslation == 'Unknown'
-                                      ? WordTranslations.getTranslation(
-                                          entry.malteseWord)
-                                      : entry.englishTranslation,
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: widget.theme.textSecondaryColor,
-                                  ),
-                                ),
-                                trailing: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    if (WordTranslations.getPhonetic(
-                                                entry.malteseWord) !=
-                                            null ||
-                                        WordTranslations.getPartOfSpeech(
-                                                entry.malteseWord) !=
-                                            null ||
-                                        WordTranslations.getRoot(
-                                                entry.malteseWord) !=
-                                            null)
-                                      const SizedBox(width: 8),
-                                    if (entry.rarity != null)
-                                      const SizedBox(width: 8),
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.end,
-                                      children: [
-                                        if (entry.rarity != null)
-                                          Text(
-                                            _formatDate(entry.caughtDate),
-                                            style: TextStyle(
-                                              fontSize: 10,
-                                              color: widget
-                                                  .theme.textSecondaryColor,
-                                            ),
-                                          ),
-                                        const SizedBox(height: 8),
-                                        Container(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 6, vertical: 2),
-                                          decoration: BoxDecoration(
-                                            color:
-                                                WordTranslations.getRarityColor(
-                                                        entry.rarity!)
-                                                    .withOpacity(0.2),
-                                            borderRadius:
-                                                BorderRadius.circular(8),
-                                            border: Border.all(
-                                              color: WordTranslations
-                                                  .getRarityColor(
-                                                      entry.rarity!),
-                                              width: 1,
-                                            ),
-                                          ),
-                                          child: Text(
-                                            WordTranslations.getRarityName(
-                                                entry.rarity!),
-                                            style: TextStyle(
-                                              fontSize: 10,
-                                              fontWeight: FontWeight.bold,
-                                              color: WordTranslations
-                                                  .getRarityColor(
-                                                      entry.rarity!),
-                                            ),
-                                          ),
-                                        ),
-                                        // const SizedBox(height: 4),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          );
+                          return _buildEntryItem(entry, index);
                         },
                       ),
               ),
@@ -261,18 +185,31 @@ class _WordDexScreenState extends State<WordDexScreen> {
     );
   }
 
-  Widget _buildStatItem(
-      String label, String value, IconData icon, Color color) {
+  // Summary stat with animated value and aligned extra content
+  Widget _buildSummaryStat({
+    required IconData icon,
+    required Color iconColor,
+    required String label,
+    required double value,
+    required String Function(double) format,
+    Widget? extra,
+  }) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Icon(icon, color: color, size: 24),
+        Icon(icon, color: iconColor, size: 22),
         const SizedBox(height: 4),
-        Text(
-          value,
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: widget.theme.textColor,
+        TweenAnimationBuilder<double>(
+          tween: Tween(begin: 0, end: value),
+          duration: const Duration(milliseconds: 700),
+          curve: Curves.easeOutCubic,
+          builder: (context, v, _) => Text(
+            format(v),
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: widget.theme.textColor,
+            ),
           ),
         ),
         Text(
@@ -282,58 +219,159 @@ class _WordDexScreenState extends State<WordDexScreen> {
             color: widget.theme.textSecondaryColor,
           ),
         ),
+        const SizedBox(height: 8),
+        if (extra != null) extra,
       ],
     );
   }
 
-  Widget _buildRaritySummary() {
-    // Count words by rarity
-    final rarityCounts = <int, int>{};
-    for (final entry in widget.wordDex.allEntries) {
-      if (entry.rarity != null) {
-        rarityCounts[entry.rarity!] = (rarityCounts[entry.rarity!] ?? 0) + 1;
-      }
-    }
+  Widget _infoPill(String text) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      decoration: BoxDecoration(
+        color: widget.theme.surfaceColor,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.white.withOpacity(0.15)),
+      ),
+      child: Text(
+        text,
+        style: TextStyle(
+          fontSize: 11,
+          color: widget.theme.textSecondaryColor,
+        ),
+      ),
+    );
+  }
 
-    // Find the rarest word caught
-    int? rarestRarity;
-    if (rarityCounts.isNotEmpty) {
-      rarestRarity = rarityCounts.keys.reduce((a, b) => a > b ? a : b);
-    }
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        if (rarestRarity != null) ...[
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-            decoration: BoxDecoration(
-              color: WordTranslations.getRarityColor(rarestRarity)
-                  .withOpacity(0.2),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: WordTranslations.getRarityColor(rarestRarity),
-                width: 1,
-              ),
-            ),
-            child: Text(
-              'Rarest: ${WordTranslations.getRarityName(rarestRarity)}',
-              style: TextStyle(
-                fontSize: 10,
-                fontWeight: FontWeight.bold,
-                color: WordTranslations.getRarityColor(rarestRarity),
-              ),
-            ),
-          ),
+  Widget _rarityChip(String label, Color color) {
+    // Theme-aware chip: blends with surface to avoid clashes
+    final blendedBg = Color.alphaBlend(
+        color.withOpacity(0.18), (widget.theme.surfaceColor.withOpacity(0.9)));
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      decoration: BoxDecoration(
+        color: blendedBg,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: color.withOpacity(0.6)),
+        boxShadow: [
+          BoxShadow(
+              color: color.withOpacity(0.08),
+              blurRadius: 8,
+              offset: const Offset(0, 2)),
         ],
-        Text(
-          '${rarityCounts.length} rarity levels',
-          style: TextStyle(
-            fontSize: 10,
-            color: widget.theme.textSecondaryColor,
+      ),
+      child: Text(
+        label,
+        style: TextStyle(
+          fontSize: 11,
+          fontWeight: FontWeight.w600,
+          color: color,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildEntryItem(WordDexEntry entry, int index) {
+    return TweenAnimationBuilder<double>(
+      tween: Tween(begin: 0, end: 1),
+      duration: Duration(milliseconds: 250 + (index * 40).clamp(0, 400)),
+      curve: Curves.easeOutCubic,
+      builder: (context, t, child) => Opacity(
+        opacity: t,
+        child: Transform.translate(
+          offset: Offset(0, 16 * (1 - t)),
+          child: child,
+        ),
+      ),
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 10),
+        decoration: BoxDecoration(
+          color: widget.theme.surfaceColor,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: Colors.white.withOpacity(0.12)),
+        ),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(12),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => WordDexDetailScreen(
+                  entry: entry,
+                  theme: widget.theme,
+                  onBack: () => Navigator.pop(context),
+                  stats: widget.stats,
+                ),
+              ),
+            );
+          },
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            child: Row(
+              children: [
+                // Accent bar
+                Container(
+                  width: 4,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(2),
+                    gradient: LinearGradient(colors: [
+                      widget.theme.accentColor.withOpacity(0.8),
+                      widget.theme.primaryColor.withOpacity(0.6),
+                    ]),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                // Title + subtitle
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        MalteseDigraphs.formatForDisplay(entry.malteseWord),
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: widget.theme.textColor,
+                        ),
+                      ),
+                      const SizedBox(height: 2),
+                      Text(
+                        entry.englishTranslation == 'Unknown'
+                            ? WordTranslations.getTranslation(entry.malteseWord)
+                            : entry.englishTranslation,
+                        style: TextStyle(
+                          fontSize: 13,
+                          color: widget.theme.textSecondaryColor,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      _formatDate(entry.caughtDate),
+                      style: TextStyle(
+                        fontSize: 10,
+                        color: widget.theme.textSecondaryColor,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    if (entry.rarity != null)
+                      _rarityChip(
+                        WordTranslations.getRarityName(entry.rarity!),
+                        WordTranslations.getRarityColor(entry.rarity!),
+                      ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
-      ],
+      ),
     );
   }
 

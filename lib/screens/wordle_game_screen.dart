@@ -314,7 +314,7 @@ class _WordleGameScreenState extends State<WordleGameScreen> {
                     // ),
                   ],
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 12),
 
                 // Game Grid
                 Expanded(
@@ -323,7 +323,7 @@ class _WordleGameScreenState extends State<WordleGameScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Container(
-                          padding: const EdgeInsets.all(12),
+                          padding: const EdgeInsets.all(8),
                           child: Column(
                             children: grid.asMap().entries.map((rowEntry) {
                               final row = rowEntry.value;
@@ -356,7 +356,7 @@ class _WordleGameScreenState extends State<WordleGameScreen> {
                                             color:
                                                 cell.state == LetterState.empty
                                                     ? widget.theme.textColor
-                                                    : widget.theme.primaryColor,
+                                                    : widget.theme.textColor,
                                           ),
                                         ),
                                       ),
@@ -458,28 +458,44 @@ class _WordleGameScreenState extends State<WordleGameScreen> {
                       ),
 
                       // ENTER Button at bottom
-                      Container(
-                        margin: const EdgeInsets.only(top: 8),
-                        child: SizedBox(
-                          width: double.infinity,
-                          height: 45,
-                          child: Material(
-                            color: currentCol == 5
-                                ? widget.theme.accentColor.withOpacity(0.8)
-                                : widget.theme.secondaryColor.withOpacity(0.3),
-                            borderRadius: BorderRadius.circular(8),
-                            child: InkWell(
-                              onTap: currentCol == 5
-                                  ? () => handleKeyPress('ENTER')
-                                  : null,
-                              borderRadius: BorderRadius.circular(8),
-                              child: Center(
-                                child: Text(
-                                  'ENTER',
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                    color: widget.theme.textColor,
+                      ConstrainedBox(
+                        constraints: const BoxConstraints(maxWidth: 520),
+                        child: Container(
+                          margin: const EdgeInsets.only(top: 8),
+                          child: SizedBox(
+                            width: double.infinity,
+                            height: 44,
+                            child: DecoratedBox(
+                              decoration: BoxDecoration(
+                                gradient: LinearGradient(
+                                  colors: currentCol == 5
+                                      ? widget.theme.primaryButtonGradient
+                                      : [
+                                          widget.theme.surfaceColor,
+                                          widget.theme.surfaceColor,
+                                        ],
+                                ),
+                                borderRadius: BorderRadius.circular(8),
+                                border: Border.all(
+                                  color: Colors.white.withOpacity(0.15),
+                                ),
+                              ),
+                              child: Material(
+                                color: Colors.transparent,
+                                child: InkWell(
+                                  onTap: currentCol == 5
+                                      ? () => handleKeyPress('ENTER')
+                                      : null,
+                                  borderRadius: BorderRadius.circular(8),
+                                  child: Center(
+                                    child: Text(
+                                      'ENTER',
+                                      style: TextStyle(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                        color: widget.theme.textColor,
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),

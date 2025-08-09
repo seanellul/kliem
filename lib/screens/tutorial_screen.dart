@@ -30,40 +30,47 @@ class _TutorialScreenState extends State<TutorialScreen>
   late Animation<double> _pulseAnimation;
   late Animation<double> _shakeAnimation;
 
-  // Tutorial steps and expected states
+  // Tutorial steps and expected states (sea-themed)
   final List<TutorialStep> _steps = [
+    // Step 1: Start with 'BARKA' (boat) — mixes correct, present and absent
     TutorialStep(
-      guess: 'HOUSE',
-      instruction: "Let's start with your first guess. Try typing 'HOUSE'",
-      expectedStates: [
-        LetterState.absent,
-        LetterState.absent,
-        LetterState.absent,
-        LetterState.absent,
-        LetterState.present
-      ],
-    ),
-    TutorialStep(
-      guess: 'FLAME',
+      guess: 'BARKA',
       instruction:
-          "Good! The 'E' is in the word but wrong position. Try 'FLAME'",
+          "Let's start with your first guess. Try typing 'BARKA', the Maltese word for 'blessing'.",
       expectedStates: [
+        // Target we lead towards in step 3: B A Ħ A R
+        // B A R K A -> [C, C, P, A, P]
+        LetterState.correct,
+        LetterState.correct,
+        LetterState.present,
         LetterState.absent,
         LetterState.present,
-        LetterState.correct,
-        LetterState.correct,
-        LetterState.correct
       ],
     ),
+    // Step 2: 'BAĦRI' (sailor) — shows 3 correct, 1 present, 1 absent
     TutorialStep(
-      guess: 'KELMA',
-      instruction: "Excellent! Now you can see the pattern. Try 'KELMA'",
+      guess: 'BAĦRI',
+      instruction:
+          "Great! 'B' and 'A' are correct, whereas 'R' and 'A' are present in the word, but at different positions. Now try 'BAĦRI'",
+      expectedStates: [
+        // B A Ħ R I vs B A Ħ A R -> [C, C, C, P, A]
+        LetterState.correct,
+        LetterState.correct,
+        LetterState.correct,
+        LetterState.present,
+        LetterState.absent,
+      ],
+    ),
+    // Step 3: Solve with 'BAĦAR' (sea)
+    TutorialStep(
+      guess: 'BAĦAR',
+      instruction: "Excellent! Finish it with 'BAĦAR'",
       expectedStates: [
         LetterState.correct,
         LetterState.correct,
         LetterState.correct,
         LetterState.correct,
-        LetterState.correct
+        LetterState.correct,
       ],
     ),
   ];
@@ -156,19 +163,23 @@ class _TutorialScreenState extends State<TutorialScreen>
       return;
     }
 
+    // Capture and clear current guess immediately to prevent it from
+    // rendering on the next empty row before the reveal animation completes
+    final String submittedGuess = _currentGuess;
     setState(() {
       _isAnimating = true;
       _canInput = false;
+      _currentGuess = '';
     });
 
     // Add guess and calculate states
-    _guesses.add(_currentGuess);
+    _guesses.add(submittedGuess);
     final states = _steps[_currentStep].expectedStates;
     _guessStates.add(states);
 
     // Update keyboard states
-    for (int i = 0; i < _currentGuess.length; i++) {
-      final letter = _currentGuess[i];
+    for (int i = 0; i < submittedGuess.length; i++) {
+      final letter = submittedGuess[i];
       final state = states[i];
       if (_keyboardStates[letter] == null ||
           state.index > (_keyboardStates[letter]?.index ?? 0)) {
@@ -340,17 +351,21 @@ class _TutorialScreenState extends State<TutorialScreen>
                 // Game Board (grid only)
                 Expanded(
                   child: Center(
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 16),
-                      decoration: BoxDecoration(
-                        color: widget.theme.surfaceColor,
-                        borderRadius: BorderRadius.circular(20),
-                        border:
-                            Border.all(color: Colors.white.withOpacity(0.2)),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: _buildWordGrid(),
+                    child: FractionallySizedBox(
+                      widthFactor: 0.95,
+                      heightFactor: 0.95,
+                      child: Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 16),
+                        decoration: BoxDecoration(
+                          color: widget.theme.surfaceColor,
+                          borderRadius: BorderRadius.circular(20),
+                          border:
+                              Border.all(color: Colors.white.withOpacity(0.2)),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: _buildWordGrid(),
+                        ),
                       ),
                     ),
                   ),
@@ -369,47 +384,67 @@ class _TutorialScreenState extends State<TutorialScreen>
   }
 
   Widget _buildWordGrid() {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      child: Column(
-        children: List.generate(6, (rowIndex) {
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 6),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(5, (colIndex) {
-                String letter = '';
-                LetterState state = LetterState.empty;
+    const int rows = 4; // Tutorial shows 4 rows only
+    const int cols = 5;
+    const double gap = 6.0;
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final double width = constraints.maxWidth - 26; // inner padding margin
+        final double height = constraints.maxHeight - 26;
+        final double sizeByWidth = (width - (cols - 1) * gap) / cols;
+        final double sizeByHeight = (height - (rows - 1) * gap) / rows;
+        final double tileSize =
+            (sizeByWidth < sizeByHeight ? sizeByWidth : sizeByHeight)
+                .floorToDouble();
 
-                if (rowIndex < _guesses.length) {
-                  letter = _guesses[rowIndex][colIndex];
-                  state = _guessStates[rowIndex][colIndex];
-                } else if (rowIndex == _guesses.length &&
-                    colIndex < _currentGuess.length) {
-                  letter = _currentGuess[colIndex];
-                  state = LetterState.input;
-                }
+        return Container(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: List.generate(rows, (rowIndex) {
+              return Padding(
+                padding:
+                    EdgeInsets.only(bottom: rowIndex == rows - 1 ? 0 : gap),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: List.generate(cols, (colIndex) {
+                    String letter = '';
+                    LetterState state = LetterState.empty;
 
-                return AnimatedBuilder(
-                  animation: _shakeAnimation,
-                  builder: (context, child) {
-                    return Transform.translate(
-                      offset: rowIndex == _guesses.length
-                          ? Offset(_shakeAnimation.value, 0)
-                          : Offset.zero,
-                      child: _buildLetterTile(letter, state),
+                    if (rowIndex < _guesses.length) {
+                      letter = _guesses[rowIndex][colIndex];
+                      state = _guessStates[rowIndex][colIndex];
+                    } else if (rowIndex == _guesses.length &&
+                        _canInput &&
+                        colIndex < _currentGuess.length) {
+                      letter = _currentGuess[colIndex];
+                      state = LetterState.input;
+                    }
+
+                    return AnimatedBuilder(
+                      animation: _shakeAnimation,
+                      builder: (context, child) {
+                        final bool shouldShake = _shakeController.isAnimating &&
+                            rowIndex == _guesses.length;
+                        return Transform.translate(
+                          offset: shouldShake
+                              ? Offset(_shakeAnimation.value, 0)
+                              : Offset.zero,
+                          child: _buildLetterTile(letter, state, tileSize),
+                        );
+                      },
                     );
-                  },
-                );
-              }),
-            ),
-          );
-        }),
-      ),
+                  }),
+                ),
+              );
+            }),
+          ),
+        );
+      },
     );
   }
 
-  Widget _buildLetterTile(String letter, LetterState state) {
+  Widget _buildLetterTile(String letter, LetterState state, double size) {
     Color backgroundColor;
     Color borderColor;
     Color textColor;
@@ -443,12 +478,12 @@ class _TutorialScreenState extends State<TutorialScreen>
     }
 
     return Container(
-      width: 52, // Same size as main game
-      height: 52,
+      width: size,
+      height: size,
       margin: const EdgeInsets.all(2),
       decoration: BoxDecoration(
         color: backgroundColor,
-        borderRadius: BorderRadius.circular(6), // Same radius as main game
+        borderRadius: BorderRadius.circular(6),
         border: Border.all(
           color: borderColor,
           width: 2,
@@ -469,7 +504,7 @@ class _TutorialScreenState extends State<TutorialScreen>
 
   Widget _buildKeyboard() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -519,7 +554,7 @@ class _TutorialScreenState extends State<TutorialScreen>
             margin: const EdgeInsets.only(top: 8),
             child: SizedBox(
               width: double.infinity,
-              height: 45,
+              height: 44,
               child: Material(
                 color: _currentGuess.length == 5
                     ? const Color(0xFF22C55E)
