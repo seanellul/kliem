@@ -7,23 +7,14 @@ class AdService {
   factory AdService() => _instance;
   AdService._internal();
 
-  // Test ad unit IDs (replace with production IDs before release)
-  static const String _testBannerAndroid = 'ca-app-pub-3940256099942544/6300978111';
-  static const String _testBannerIos = 'ca-app-pub-3940256099942544/2934735716';
-  static const String _testInterstitialAndroid = 'ca-app-pub-3940256099942544/1033173712';
-  static const String _testInterstitialIos = 'ca-app-pub-3940256099942544/4411468910';
-  static const String _testRewardedAndroid = 'ca-app-pub-3940256099942544/5224354917';
-  static const String _testRewardedIos = 'ca-app-pub-3940256099942544/1712485313';
+  // Production ad unit IDs
+  static const String _bannerAdUnitIdValue = 'ca-app-pub-9907931354965625/2415448029';
+  static const String _interstitialAdUnitIdValue = 'ca-app-pub-9907931354965625/6888357143';
+  static const String _rewardedAdUnitIdValue = 'ca-app-pub-9907931354965625/6636571125';
 
-  // TODO: Replace with production ad unit IDs
-  static String get _bannerAdUnitId =>
-      Platform.isAndroid ? _testBannerAndroid : _testBannerIos;
-
-  static String get _interstitialAdUnitId =>
-      Platform.isAndroid ? _testInterstitialAndroid : _testInterstitialIos;
-
-  static String get _rewardedAdUnitId =>
-      Platform.isAndroid ? _testRewardedAndroid : _testRewardedIos;
+  static String get _bannerAdUnitId => _bannerAdUnitIdValue;
+  static String get _interstitialAdUnitId => _interstitialAdUnitIdValue;
+  static String get _rewardedAdUnitId => _rewardedAdUnitIdValue;
 
   BannerAd? _bannerAd;
   InterstitialAd? _interstitialAd;
