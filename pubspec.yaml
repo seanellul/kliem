@@ -1,5 +1,5 @@
 name: kliem
-description: "A new Flutter project."
+description: "Kliem - A Maltese word discovery game."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
@@ -39,6 +39,8 @@ dependencies:
   path_provider: ^2.1.1
   share_plus: ^10.0.2
   super_clipboard: ^0.8.13
+  google_mobile_ads: ^5.2.0
+  in_app_purchase: ^3.2.0
 
 dev_dependencies:
   flutter_test:
@@ -101,8 +103,8 @@ flutter_launcher_icons:
   web:
     generate: true
     image_path: "assets/images/kliem.png"
-    background_color: "#hexcode"
-    theme_color: "#hexcode"
+    background_color: "#1E40AF"
+    theme_color: "#1E40AF"
   windows:
     generate: true
     image_path: "assets/images/kliem.png"

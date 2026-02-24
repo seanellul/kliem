@@ -28,6 +28,14 @@ class WordDexScreen extends StatefulWidget {
 
 class _WordDexScreenState extends State<WordDexScreen> {
   SortOption _currentSort = SortOption.date;
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +63,7 @@ class _WordDexScreenState extends State<WordDexScreen> {
                     ),
                     Expanded(
                       child: Text(
-                        '📚 Word-Dex',
+                        '\u{1F4DA} Word-Dex',
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
@@ -136,23 +144,79 @@ class _WordDexScreenState extends State<WordDexScreen> {
                 );
               }),
 
-              const SizedBox(height: 16),
+              const SizedBox(height: 12),
+
+              // Search Bar
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: TextField(
+                  controller: _searchController,
+                  onChanged: (value) {
+                    setState(() {
+                      _searchQuery = value;
+                    });
+                  },
+                  style: TextStyle(color: widget.theme.textColor),
+                  decoration: InputDecoration(
+                    hintText: 'Search words...',
+                    hintStyle:
+                        TextStyle(color: widget.theme.textSecondaryColor),
+                    prefixIcon: Icon(Icons.search,
+                        color: widget.theme.textSecondaryColor),
+                    suffixIcon: _searchQuery.isNotEmpty
+                        ? IconButton(
+                            icon: Icon(Icons.clear,
+                                color: widget.theme.textSecondaryColor),
+                            onPressed: () {
+                              setState(() {
+                                _searchController.clear();
+                                _searchQuery = '';
+                              });
+                            },
+                          )
+                        : null,
+                    filled: true,
+                    fillColor: widget.theme.surfaceColor,
+                    contentPadding: const EdgeInsets.symmetric(vertical: 12),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide:
+                          BorderSide(color: Colors.white.withOpacity(0.2)),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide:
+                          BorderSide(color: Colors.white.withOpacity(0.2)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(color: widget.theme.accentColor),
+                    ),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 12),
 
               // Words List
               Expanded(
-                child: widget.wordDex.allEntries.isEmpty
+                child: _getFilteredSortedEntries().isEmpty
                     ? Center(
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Icon(
-                              Icons.book_outlined,
+                              _searchQuery.isNotEmpty
+                                  ? Icons.search_off
+                                  : Icons.book_outlined,
                               size: 64,
                               color: widget.theme.textColor.withOpacity(0.5),
                             ),
                             const SizedBox(height: 16),
                             Text(
-                              'No words caught yet!',
+                              _searchQuery.isNotEmpty
+                                  ? 'No matching words'
+                                  : 'No words caught yet!',
                               style: TextStyle(
                                 fontSize: 18,
                                 color: widget.theme.textColor.withOpacity(0.7),
@@ -160,7 +224,9 @@ class _WordDexScreenState extends State<WordDexScreen> {
                             ),
                             const SizedBox(height: 8),
                             Text(
-                              'Start playing to catch words!',
+                              _searchQuery.isNotEmpty
+                                  ? 'Try a different search term'
+                                  : 'Start playing to catch words!',
                               style: TextStyle(
                                 fontSize: 14,
                                 color: widget.theme.textSecondaryColor,
@@ -171,9 +237,9 @@ class _WordDexScreenState extends State<WordDexScreen> {
                       )
                     : ListView.builder(
                         padding: const EdgeInsets.symmetric(horizontal: 16),
-                        itemCount: _getSortedEntries().length,
+                        itemCount: _getFilteredSortedEntries().length,
                         itemBuilder: (context, index) {
-                          final entry = _getSortedEntries()[index];
+                          final entry = _getFilteredSortedEntries()[index];
                           return _buildEntryItem(entry, index);
                         },
                       ),
@@ -447,6 +513,21 @@ class _WordDexScreenState extends State<WordDexScreen> {
     }
 
     return entries;
+  }
+
+  List<WordDexEntry> _getFilteredSortedEntries() {
+    final entries = _getSortedEntries();
+    if (_searchQuery.isEmpty) return entries;
+
+    final query = _searchQuery.toLowerCase();
+    return entries.where((entry) {
+      final word = entry.malteseWord.toLowerCase();
+      final translation = (entry.englishTranslation == 'Unknown'
+              ? WordTranslations.getTranslation(entry.malteseWord)
+              : entry.englishTranslation)
+          .toLowerCase();
+      return word.contains(query) || translation.contains(query);
+    }).toList();
   }
 
   String _formatDate(DateTime date) {

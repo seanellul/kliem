@@ -12,6 +12,7 @@ class StorageService {
   static const String _versionKey = 'kelma-version';
   static const String _fileBackupName = 'worddex_backup.json';
   static const String _currentVersion = '1.0';
+  static const String _adFreeKey = 'kelma-ad-free';
 
   /// Load WordDex data with multiple fallback strategies
   static Future<WordDex> loadWordDex() async {
@@ -240,6 +241,27 @@ class StorageService {
     } catch (e) {
       debugPrint('Error exporting WordDex: $e');
       return null;
+    }
+  }
+
+  /// Save ad-free status
+  static Future<void> saveAdFreeStatus(bool adFree) async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool(_adFreeKey, adFree);
+    } catch (e) {
+      debugPrint('Error saving ad-free status: $e');
+    }
+  }
+
+  /// Load ad-free status
+  static Future<bool> loadAdFreeStatus() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      return prefs.getBool(_adFreeKey) ?? false;
+    } catch (e) {
+      debugPrint('Error loading ad-free status: $e');
+      return false;
     }
   }
 

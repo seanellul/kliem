@@ -80,7 +80,7 @@ class MalteseDigraphs {
       if (i + 1 < normalized.length) {
         String twoChars = normalized.substring(i, i + 2);
         if (twoChars == 'IE' || twoChars == 'GĦ') {
-          letters.add(_digraphs[twoChars] ?? twoChars);
+          letters.add(twoChars);
           i += 2;
           continue;
         }

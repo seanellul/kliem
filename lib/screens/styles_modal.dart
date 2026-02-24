@@ -15,6 +15,33 @@ class StylesModal extends StatelessWidget {
     required this.onThemeSelect,
   });
 
+  static const Map<String, List<String>> _themeCategories = {
+    'Color': [
+      'default',
+      'terracotta',
+      'mediterranean',
+      'luzzu',
+      'harbor',
+      'lagoon',
+      'redblue',
+    ],
+    'Monochrome': [
+      'nightharbor',
+      'deepcave',
+      'charcoal',
+      'monochrome',
+      'minimal',
+      'highcontrast',
+      'paperwhite',
+    ],
+    'Maltese': [
+      'limestone',
+      'heritage',
+      'architecture',
+      'sdm',
+    ],
+  };
+
   @override
   Widget build(BuildContext context) {
     if (!isOpen) return const SizedBox.shrink();
@@ -46,7 +73,7 @@ class StylesModal extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Text(
-                        '🎨 Stili',
+                        '\u{1F3A8} Stili',
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
@@ -61,16 +88,35 @@ class StylesModal extends StatelessWidget {
                   ),
                 ),
 
-                // Theme Options
+                // Theme Options (categorized)
                 Flexible(
                   child: SingleChildScrollView(
                     padding: const EdgeInsets.symmetric(horizontal: 24),
                     child: Column(
-                      children: ThemeModel.getAllThemes().map((theme) {
-                        return Padding(
-                          padding: const EdgeInsets.only(bottom: 12),
-                          child: _buildThemeCard(theme),
-                        );
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: _themeCategories.entries.expand((category) {
+                        return [
+                          // Section header
+                          Padding(
+                            padding: const EdgeInsets.only(top: 8, bottom: 12),
+                            child: Text(
+                              category.key,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white70,
+                              ),
+                            ),
+                          ),
+                          // Theme cards in this category
+                          ...category.value.map((themeId) {
+                            final theme = ThemeModel.getTheme(themeId);
+                            return Padding(
+                              padding: const EdgeInsets.only(bottom: 12),
+                              child: _buildThemeCard(theme),
+                            );
+                          }),
+                        ];
                       }).toList(),
                     ),
                   ),
@@ -165,7 +211,7 @@ class StylesModal extends StatelessWidget {
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: const Text(
-                          '🌙 Dark',
+                          '\u{1F319} Dark',
                           style: TextStyle(
                             fontSize: 10,
                             color: Colors.white,

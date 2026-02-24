@@ -1,6 +1,9 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import '../models/theme_model.dart';
+import '../models/replay_data.dart';
 import '../utils/maltese_digraphs.dart';
+import '../utils/maltese_words.dart';
 
 enum LetterState { correct, present, absent, empty }
 
@@ -14,8 +17,10 @@ class CellData {
 class WordleGameScreen extends StatefulWidget {
   final VoidCallback onBack;
   final String targetWord;
-  final Function(bool, int) onGameComplete;
+  final Function(bool, int, {List<List<CellData>>? gridData}) onGameComplete;
   final ThemeModel theme;
+  final bool colorblindMode;
+  final ReplayData? replayData;
 
   const WordleGameScreen({
     super.key,
@@ -23,40 +28,104 @@ class WordleGameScreen extends StatefulWidget {
     required this.targetWord,
     required this.onGameComplete,
     required this.theme,
+    this.colorblindMode = false,
+    this.replayData,
   });
 
   @override
   State<WordleGameScreen> createState() => _WordleGameScreenState();
 }
 
-class _WordleGameScreenState extends State<WordleGameScreen> {
+class _WordleGameScreenState extends State<WordleGameScreen>
+    with SingleTickerProviderStateMixin {
   late List<List<CellData>> grid;
   int currentRow = 0;
   int currentCol = 0;
   bool gameOver = false;
   bool won = false;
+  bool _isAnimating = false;
   Map<String, LetterState> keyboardState = {};
+
+  // Shake animation for invalid words
+  late AnimationController _shakeController;
+  late Animation<double> _shakeAnimation;
+
+  // Pre-computed normalized word set for O(1) lookup
+  late final Set<String> _normalizedValidWords;
 
   final List<List<String>> malteseKeyboard = [
     ['Q', 'W', 'E', 'R', 'T', 'U', 'I', 'O', 'P'],
-    ['A', 'S', 'D', 'F', 'G', 'Ġ', 'H', 'Ħ', 'J', 'K', 'L'],
-    ['Z', 'Ż', 'X', 'Ċ', 'V', 'B', 'N', 'M', 'DELETE']
+    ['A', 'S', 'D', 'F', 'G', '\u0120', 'H', '\u0126', 'J', 'K', 'L'],
+    ['Z', '\u017B', 'X', '\u010A', 'V', 'B', 'N', 'M', 'DELETE']
   ];
 
   @override
   void initState() {
     super.initState();
     _initializeGrid();
+    _normalizedValidWords = MalteseWords.getWords()
+        .map((w) => w.toUpperCase())
+        .toSet();
+
+    _shakeController = AnimationController(
+      duration: const Duration(milliseconds: 400),
+      vsync: this,
+    );
+    _shakeAnimation = Tween<double>(begin: 0, end: 1).animate(
+      CurvedAnimation(parent: _shakeController, curve: Curves.elasticIn),
+    );
+    _shakeController.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        _shakeController.reset();
+      }
+    });
   }
+
+  @override
+  void dispose() {
+    _shakeController.dispose();
+    super.dispose();
+  }
+
+  bool get _isReplayMode => widget.replayData != null;
 
   void _initializeGrid() {
     grid = List.generate(6, (row) {
       return List.generate(5, (col) => CellData());
     });
+
+    // In replay mode, pre-fill row 0 with the hint row
+    if (widget.replayData != null) {
+      final hintRow = widget.replayData!.hintRow;
+      for (int i = 0; i < 5 && i < hintRow.length; i++) {
+        grid[0][i] = CellData(
+          letter: hintRow[i].letter,
+          state: hintRow[i].state,
+        );
+      }
+      currentRow = 1;
+      currentCol = 0;
+      _populateKeyboardFromHintRow(hintRow);
+    }
+  }
+
+  void _populateKeyboardFromHintRow(List<CellData> hintRow) {
+    for (final cell in hintRow) {
+      if (cell.letter.isEmpty) continue;
+      if (cell.letter == 'IE') {
+        _updateKeyboardState('I', cell.state, keyboardState);
+        _updateKeyboardState('E', cell.state, keyboardState);
+      } else if (cell.letter == 'G\u0126') {
+        _updateKeyboardState('G', cell.state, keyboardState);
+        _updateKeyboardState('\u0126', cell.state, keyboardState);
+      } else {
+        _updateKeyboardState(cell.letter, cell.state, keyboardState);
+      }
+    }
   }
 
   void handleKeyPress(String key) {
-    if (gameOver) return;
+    if (gameOver || _isAnimating) return;
 
     if (key == 'ENTER') {
       if (currentCol == 5) {
@@ -67,7 +136,7 @@ class _WordleGameScreenState extends State<WordleGameScreen> {
         setState(() {
           // Check if we're deleting a digraph
           final currentCell = grid[currentRow][currentCol - 1];
-          if (currentCell.letter == 'Ie' || currentCell.letter == 'Għ') {
+          if (currentCell.letter == 'IE' || currentCell.letter == 'G\u0126') {
             // Delete the entire digraph
             grid[currentRow][currentCol - 1] = CellData();
             currentCol--;
@@ -76,7 +145,7 @@ class _WordleGameScreenState extends State<WordleGameScreen> {
             if (currentCol > 1) {
               final prevCell = grid[currentRow][currentCol - 2];
               if ((prevCell.letter == 'I' && currentCell.letter == 'E') ||
-                  (prevCell.letter == 'G' && currentCell.letter == 'Ħ')) {
+                  (prevCell.letter == 'G' && currentCell.letter == '\u0126')) {
                 // Delete both parts of the digraph
                 grid[currentRow][currentCol - 2] = CellData();
                 grid[currentRow][currentCol - 1] = CellData();
@@ -105,7 +174,7 @@ class _WordleGameScreenState extends State<WordleGameScreen> {
           // Check if previous letter was 'I'
           final prevCell = grid[currentRow][currentCol - 1];
           if (prevCell.letter == 'I') {
-            // Form the digraph 'Ie'
+            // Form the digraph 'IE'
             grid[currentRow][currentCol - 1] = CellData(letter: 'IE');
             // Don't increment currentCol since we're replacing the previous cell
           } else {
@@ -113,15 +182,15 @@ class _WordleGameScreenState extends State<WordleGameScreen> {
             grid[currentRow][currentCol] = CellData(letter: key);
             currentCol++;
           }
-        } else if (key == 'Ħ' && currentCol > 0) {
+        } else if (key == '\u0126' && currentCol > 0) {
           // Check if previous letter was 'G'
           final prevCell = grid[currentRow][currentCol - 1];
           if (prevCell.letter == 'G') {
-            // Form the digraph 'Għ'
-            grid[currentRow][currentCol - 1] = CellData(letter: 'GĦ');
+            // Form the digraph 'GH'
+            grid[currentRow][currentCol - 1] = CellData(letter: 'G\u0126');
             // Don't increment currentCol since we're replacing the previous cell
           } else {
-            // Regular 'Ħ'
+            // Regular 'H'
             grid[currentRow][currentCol] = CellData(letter: key);
             currentCol++;
           }
@@ -134,6 +203,10 @@ class _WordleGameScreenState extends State<WordleGameScreen> {
     }
   }
 
+  bool _isValidWord(String guess) {
+    return _normalizedValidWords.contains(guess.toUpperCase());
+  }
+
   void submitGuess() {
     // Get the guess as individual letters (including digraphs)
     final guessLetters = grid[currentRow]
@@ -143,6 +216,34 @@ class _WordleGameScreenState extends State<WordleGameScreen> {
 
     // Join letters and normalize
     final guess = MalteseDigraphs.joinLetters(guessLetters).toLowerCase();
+
+    // Validate against word list
+    if (!_isValidWord(guess)) {
+      _shakeController.forward();
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(
+            content: const Text(
+              'Not in word list',
+              textAlign: TextAlign.center,
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            duration: const Duration(milliseconds: 1500),
+            behavior: SnackBarBehavior.floating,
+            backgroundColor: const Color(0xFF424242),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(24),
+            ),
+            width: 200,
+          ),
+        );
+      return;
+    }
+
+    // Lock input during animation
+    _isAnimating = true;
+
     final newKeyboardState = Map<String, LetterState>.from(keyboardState);
 
     // Split target into letters for comparison
@@ -175,12 +276,12 @@ class _WordleGameScreenState extends State<WordleGameScreen> {
       // Update keyboard state for individual characters
       if (guessLetter.isNotEmpty) {
         // For digraphs, update both individual characters
-        if (guessLetter == 'Ie') {
+        if (guessLetter == 'IE') {
           _updateKeyboardState('I', state, newKeyboardState);
           _updateKeyboardState('E', state, newKeyboardState);
-        } else if (guessLetter == 'Għ') {
+        } else if (guessLetter == 'G\u0126') {
           _updateKeyboardState('G', state, newKeyboardState);
-          _updateKeyboardState('Ħ', state, newKeyboardState);
+          _updateKeyboardState('\u0126', state, newKeyboardState);
         } else {
           _updateKeyboardState(guessLetter, state, newKeyboardState);
         }
@@ -208,17 +309,20 @@ class _WordleGameScreenState extends State<WordleGameScreen> {
           setState(() {
             won = true;
             gameOver = true;
+            _isAnimating = false;
           });
           widget.onGameComplete(true, currentRow + 1);
         } else if (currentRow == 5) {
           setState(() {
             gameOver = true;
+            _isAnimating = false;
           });
-          widget.onGameComplete(false, 6);
+          widget.onGameComplete(false, 6, gridData: grid);
         } else {
           setState(() {
             currentRow++;
             currentCol = 0;
+            _isAnimating = false;
           });
         }
       }
@@ -244,6 +348,7 @@ class _WordleGameScreenState extends State<WordleGameScreen> {
       currentCol = 0;
       gameOver = false;
       won = false;
+      _isAnimating = false;
       keyboardState.clear();
     });
   }
@@ -251,11 +356,17 @@ class _WordleGameScreenState extends State<WordleGameScreen> {
   Color getCellColor(LetterState state) {
     switch (state) {
       case LetterState.correct:
-        return const Color(0xFF22C55E); // Green-500
+        return widget.colorblindMode
+            ? ThemeModel.colorblindCorrect
+            : widget.theme.correctColor;
       case LetterState.present:
-        return const Color(0xFFEAB308); // Yellow-500
+        return widget.colorblindMode
+            ? ThemeModel.colorblindPresent
+            : widget.theme.presentColor;
       case LetterState.absent:
-        return const Color(0xFF4B5563); // Gray-600
+        return widget.colorblindMode
+            ? ThemeModel.colorblindAbsent
+            : widget.theme.absentColor;
       case LetterState.empty:
         return Colors.transparent;
     }
@@ -265,11 +376,17 @@ class _WordleGameScreenState extends State<WordleGameScreen> {
     final state = keyboardState[key];
     switch (state) {
       case LetterState.correct:
-        return const Color(0xFF22C55E); // Green-500
+        return widget.colorblindMode
+            ? ThemeModel.colorblindCorrect
+            : widget.theme.correctColor;
       case LetterState.present:
-        return const Color(0xFFEAB308); // Yellow-500
+        return widget.colorblindMode
+            ? ThemeModel.colorblindPresent
+            : widget.theme.presentColor;
       case LetterState.absent:
-        return const Color(0xFF4B5563); // Gray-600
+        return widget.colorblindMode
+            ? ThemeModel.colorblindAbsent
+            : widget.theme.absentColor;
       default:
         return widget.theme.surfaceColor;
     }
@@ -300,18 +417,6 @@ class _WordleGameScreenState extends State<WordleGameScreen> {
                       icon: Icon(Icons.arrow_back,
                           color: widget.theme.textColor, size: 24),
                     ),
-                    // Text(
-                    //   'KLIEM',
-                    //   style: TextStyle(
-                    //     fontSize: 20,
-                    //     fontWeight: FontWeight.bold,
-                    //     color: widget.theme.textColor,
-                    //   ),
-                    // ),
-                    // IconButton(
-                    //   onPressed: resetGame,
-                    //   icon: Icon(Icons.refresh, color: widget.theme.textColor),
-                    // ),
                   ],
                 ),
                 const SizedBox(height: 12),
@@ -326,42 +431,78 @@ class _WordleGameScreenState extends State<WordleGameScreen> {
                           padding: const EdgeInsets.all(8),
                           child: Column(
                             children: grid.asMap().entries.map((rowEntry) {
+                              final rowIndex = rowEntry.key;
                               final row = rowEntry.value;
-                              return Padding(
-                                padding: const EdgeInsets.only(bottom: 6),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: row.asMap().entries.map((colEntry) {
-                                    final cell = colEntry.value;
-                                    return Container(
-                                      width: 52,
-                                      height: 52,
-                                      margin: const EdgeInsets.all(2),
-                                      decoration: BoxDecoration(
-                                        color: getCellColor(cell.state),
-                                        border: Border.all(
-                                          color: cell.state == LetterState.empty
-                                              ? const Color(0xFF9CA3AF)
-                                              : getCellColor(cell.state),
-                                          width: 2,
-                                        ),
-                                        borderRadius: BorderRadius.circular(6),
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          cell.letter,
-                                          style: TextStyle(
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold,
-                                            color:
-                                                cell.state == LetterState.empty
-                                                    ? widget.theme.textColor
-                                                    : widget.theme.textColor,
+                              final isCurrentRow = rowIndex == currentRow;
+                              final isLockedHintRow = _isReplayMode && rowIndex == 0;
+                              return AnimatedBuilder(
+                                animation: _shakeAnimation,
+                                builder: (context, child) {
+                                  double offset = 0;
+                                  if (isCurrentRow &&
+                                      _shakeController.isAnimating) {
+                                    offset = sin(_shakeAnimation.value *
+                                            3 *
+                                            pi) *
+                                        8;
+                                  }
+                                  return Transform.translate(
+                                    offset: Offset(offset, 0),
+                                    child: child,
+                                  );
+                                },
+                                child: Opacity(
+                                  opacity: isLockedHintRow ? 0.6 : 1.0,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(bottom: 6),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        if (isLockedHintRow)
+                                          Padding(
+                                            padding: const EdgeInsets.only(right: 4),
+                                            child: Icon(
+                                              Icons.lock,
+                                              size: 14,
+                                              color: widget.theme.textColor.withOpacity(0.5),
+                                            ),
                                           ),
-                                        ),
-                                      ),
-                                    );
-                                  }).toList(),
+                                        ...row.asMap().entries.map((colEntry) {
+                                          final cell = colEntry.value;
+                                          return Container(
+                                            width: 52,
+                                            height: 52,
+                                            margin: const EdgeInsets.all(2),
+                                            decoration: BoxDecoration(
+                                              color: getCellColor(cell.state),
+                                              border: Border.all(
+                                                color:
+                                                    cell.state == LetterState.empty
+                                                        ? const Color(0xFF9CA3AF)
+                                                        : getCellColor(cell.state),
+                                                width: 2,
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(6),
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                cell.letter,
+                                                style: TextStyle(
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: cell.state ==
+                                                          LetterState.empty
+                                                      ? widget.theme.textColor
+                                                      : Colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        }),
+                                      ],
+                                    ),
+                                  ),
                                 ),
                               );
                             }).toList(),
@@ -390,7 +531,7 @@ class _WordleGameScreenState extends State<WordleGameScreen> {
                                 ),
                               ),
                               child: Text(
-                                won ? 'Word Caught! 🎉' : 'Word Escaped! 💨',
+                                won ? 'Word Caught! \u{1F389}' : 'Word Escaped! \u{1F4A8}',
                                 style: TextStyle(
                                   fontSize: 18,
                                   fontWeight: FontWeight.bold,
@@ -438,7 +579,7 @@ class _WordleGameScreenState extends State<WordleGameScreen> {
                                           height: 45,
                                           child: Center(
                                             child: Text(
-                                              key == 'DELETE' ? '⌫' : key,
+                                              key == 'DELETE' ? '\u232B' : key,
                                               style: TextStyle(
                                                 fontSize: 15,
                                                 fontWeight: FontWeight.bold,
@@ -468,7 +609,7 @@ class _WordleGameScreenState extends State<WordleGameScreen> {
                             child: DecoratedBox(
                               decoration: BoxDecoration(
                                 gradient: LinearGradient(
-                                  colors: currentCol == 5
+                                  colors: currentCol == 5 && !_isAnimating
                                       ? widget.theme.primaryButtonGradient
                                       : [
                                           widget.theme.surfaceColor,
@@ -483,7 +624,7 @@ class _WordleGameScreenState extends State<WordleGameScreen> {
                               child: Material(
                                 color: Colors.transparent,
                                 child: InkWell(
-                                  onTap: currentCol == 5
+                                  onTap: currentCol == 5 && !_isAnimating
                                       ? () => handleKeyPress('ENTER')
                                       : null,
                                   borderRadius: BorderRadius.circular(8),

@@ -1,20 +1,24 @@
+import '../utils/maltese_words.dart';
+
 class GameStats {
-  int wordsCaught;
-  int wordsEscaped;
   int currentStreak;
   int maxStreak;
   Set<String> caughtWords;
-  Set<String> escapedWords; // Track individual escaped words
+  Set<String> escapedWords;
 
   GameStats({
-    this.wordsCaught = 0,
-    this.wordsEscaped = 0,
+    int wordsCaught = 0,
+    int wordsEscaped = 0,
     this.currentStreak = 0,
     this.maxStreak = 0,
     Set<String>? caughtWords,
     Set<String>? escapedWords,
   }) : caughtWords = caughtWords ?? <String>{},
        escapedWords = escapedWords ?? <String>{};
+
+  int get wordsCaught => caughtWords.length;
+
+  int get wordsEscaped => escapedWords.length;
 
   double get catchRate {
     final total = wordsCaught + wordsEscaped;
@@ -23,7 +27,7 @@ class GameStats {
   }
 
   int get wordsLeft {
-    return 2111 - wordsCaught; // Total words minus caught words
+    return MalteseWords.getWords().length - wordsCaught;
   }
 
   int get totalWords {
@@ -40,7 +44,6 @@ class GameStats {
 
   void addCaughtWord(String word) {
     caughtWords.add(word);
-    wordsCaught++;
     currentStreak++;
     if (currentStreak > maxStreak) {
       maxStreak = currentStreak;
@@ -49,13 +52,10 @@ class GameStats {
 
   void addEscapedWord(String word) {
     escapedWords.add(word);
-    wordsEscaped++;
     currentStreak = 0;
   }
 
   int getEscapeCount(String word) {
-    // Count how many times this word has escaped
-    // This is a simple implementation - in a real app you might want to track dates
     return escapedWords.contains(word) ? 1 : 0;
   }
 

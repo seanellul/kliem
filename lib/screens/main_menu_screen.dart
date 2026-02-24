@@ -118,14 +118,14 @@ class MainMenuScreen extends StatelessWidget {
                                     value: stats.wordsCaught.toString(),
                                   ),
                                 ),
-                                // Expanded(
-                                //   child: _buildStatItem(
-                                //     icon: Icons.cancel,
-                                //     iconColor: Colors.red,
-                                //     label: 'Escaped',
-                                //     value: stats.wordsEscaped.toString(),
-                                //   ),
-                                // ),
+                                Expanded(
+                                  child: _buildStatItem(
+                                    icon: Icons.local_fire_department,
+                                    iconColor: Colors.orange,
+                                    label: 'Streak',
+                                    value: '${stats.currentStreak} / ${stats.maxStreak}',
+                                  ),
+                                ),
                                 Expanded(
                                   child: _buildStatItem(
                                     icon: Icons.book,
@@ -136,20 +136,6 @@ class MainMenuScreen extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            // const SizedBox(height: 16),
-                            // Row(
-                            //   children: [
-
-                            //     Expanded(
-                            //       child: _buildStatItem(
-                            //         icon: Icons.trending_up,
-                            //         iconColor: Colors.orange,
-                            //         label: 'Rate',
-                            //         value: '${stats.catchRate.round()}%',
-                            //       ),
-                            //     ),
-                            //   ],
-                            // ),
                           ],
                         ),
                       ),

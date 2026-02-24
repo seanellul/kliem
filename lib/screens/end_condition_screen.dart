@@ -15,7 +15,10 @@ class EndConditionScreen extends StatefulWidget {
   final int attempts;
   final ThemeModel theme;
   final VoidCallback onBackToMenu;
+  final VoidCallback onPlayAgain;
   final bool wasPreviouslyEscaped;
+  final bool canReplay;
+  final VoidCallback? onReplay;
 
   const EndConditionScreen({
     super.key,
@@ -24,7 +27,10 @@ class EndConditionScreen extends StatefulWidget {
     required this.attempts,
     required this.theme,
     required this.onBackToMenu,
+    required this.onPlayAgain,
     required this.wasPreviouslyEscaped,
+    this.canReplay = false,
+    this.onReplay,
   });
 
   @override
@@ -66,7 +72,7 @@ class _EndConditionScreenState extends State<EndConditionScreen> {
             backgroundColor: widget.theme.surfaceColor,
             foregroundColor: widget.theme.textColor,
             elevation: 0,
-            padding: const EdgeInsets.symmetric(horizontal: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 8),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12),
               side: BorderSide(color: Colors.white.withOpacity(0.15)),
@@ -89,7 +95,7 @@ class _EndConditionScreenState extends State<EndConditionScreen> {
 
       final verb = widget.won ? 'caught' : 'missed';
       final text =
-          'I $verb "${widget.word.toUpperCase()}" in ${widget.attempts}/6 on KLIEM. 🇲🇹';
+          'I $verb "${widget.word.toUpperCase()}" in ${widget.attempts}/6 on KLIEM. \u{1F1F2}\u{1F1F9}';
       await Share.shareXFiles([
         XFile(
           file.path,
@@ -249,7 +255,7 @@ class _EndConditionScreenState extends State<EndConditionScreen> {
                         // Attempts & date
                         const SizedBox(height: 4),
                         Text(
-                          'Attempts: ${widget.attempts}/6  •  ${_formatDate(DateTime.now())}',
+                          'Attempts: ${widget.attempts}/6  \u2022  ${_formatDate(DateTime.now())}',
                           style: TextStyle(
                             fontSize: 14,
                             color: widget.theme.textSecondaryColor,
@@ -318,6 +324,68 @@ class _EndConditionScreenState extends State<EndConditionScreen> {
                       ]),
                     ),
                   ),
+                  // Replay Ad Button (only when lost and replay available)
+                  if (!widget.won && widget.canReplay && widget.onReplay != null) ...[
+                    const SizedBox(height: 16),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 52,
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: widget.theme.primaryButtonGradient,
+                          ),
+                          borderRadius: BorderRadius.circular(14),
+                          border: Border.all(
+                            color: Colors.white.withOpacity(0.2),
+                          ),
+                        ),
+                        child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            onTap: widget.onReplay,
+                            borderRadius: BorderRadius.circular(14),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 16),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.play_circle_outline,
+                                    color: widget.theme.textColor,
+                                    size: 24,
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Watch Ad to Replay',
+                                        style: TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                          color: widget.theme.textColor,
+                                        ),
+                                      ),
+                                      Text(
+                                        'Watch a short video for another chance (5 attempts)',
+                                        style: TextStyle(
+                                          fontSize: 11,
+                                          color: widget.theme.textColor.withOpacity(0.7),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+
                   const SizedBox(height: 24),
 
                   // Actions
@@ -328,13 +396,19 @@ class _EndConditionScreenState extends State<EndConditionScreen> {
                         label: 'Copy',
                         onPressed: _copyImage,
                       ),
-                      const SizedBox(width: 12),
+                      const SizedBox(width: 8),
                       _buildActionButton(
                         icon: Icons.ios_share,
                         label: 'Share',
                         onPressed: _shareResult,
                       ),
-                      const SizedBox(width: 12),
+                      const SizedBox(width: 8),
+                      _buildActionButton(
+                        icon: Icons.replay,
+                        label: 'Again',
+                        onPressed: widget.onPlayAgain,
+                      ),
+                      const SizedBox(width: 8),
                       _buildActionButton(
                         icon: Icons.home_outlined,
                         label: 'Home',

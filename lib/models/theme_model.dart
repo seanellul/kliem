@@ -11,6 +11,9 @@ class ThemeModel {
   final Color surfaceColor;
   final Color textColor;
   final Color textSecondaryColor;
+  final Color correctColor;
+  final Color presentColor;
+  final Color absentColor;
 
   ThemeModel({
     required this.id,
@@ -23,11 +26,19 @@ class ThemeModel {
     required this.surfaceColor,
     required this.textColor,
     required this.textSecondaryColor,
+    this.correctColor = const Color(0xFF22C55E),
+    this.presentColor = const Color(0xFFEAB308),
+    this.absentColor = const Color(0xFF4B5563),
   });
+
+  // Colorblind-safe palette (universal across all themes)
+  static const Color colorblindCorrect = Color(0xFFF5793A);
+  static const Color colorblindPresent = Color(0xFF85C0F9);
+  static const Color colorblindAbsent = Color(0xFF787C7E);
 
   // Gradients & design tokens
   // A soft background gradient tuned to work across light/dark themes.
-  // Order: start → mid → end. Screens should use these directly for
+  // Order: start -> mid -> end. Screens should use these directly for
   // backgrounds to keep the visual language consistent across themes.
   List<Color> get backgroundGradient => [
         backgroundColor.withOpacity(0.90),
@@ -55,7 +66,7 @@ class ThemeModel {
       case 'default':
         return ThemeModel(
           id: 'default',
-          name: 'Baħar u Sajf',
+          name: 'Bahar u Sajf',
           nameEn: 'Summer Seas',
           primaryColor: const Color(0xFF1E40AF),
           secondaryColor: const Color(0xFFF97316),
@@ -68,7 +79,7 @@ class ThemeModel {
       case 'terracotta':
         return ThemeModel(
           id: 'terracotta',
-          name: 'L-Art l-Ħamra',
+          name: 'L-Art l-Hamra',
           nameEn: 'The Red Earth',
           primaryColor: const Color(0xFFC2410C),
           secondaryColor: const Color(0xFFD97706),
@@ -94,7 +105,7 @@ class ThemeModel {
       case 'limestone':
         return ThemeModel(
           id: 'limestone',
-          name: 'Il-Ġebla tal-Franka',
+          name: 'Il-Gebla tal-Franka',
           nameEn: 'Limestone',
           primaryColor: const Color(0xFF57534E),
           accentColor: const Color.fromARGB(255, 148, 85, 12),
@@ -185,7 +196,7 @@ class ThemeModel {
       case 'deepcave':
         return ThemeModel(
           id: 'deepcave',
-          name: 'Id-Dlam ta\' l-Għar',
+          name: 'Id-Dlam ta\' l-Ghar',
           nameEn: 'Dark Cave',
           primaryColor: Colors.black,
           secondaryColor: const Color(0xFFFB923C),
@@ -198,7 +209,7 @@ class ThemeModel {
       case 'monochrome':
         return ThemeModel(
           id: 'monochrome',
-          name: 'Griż Pur',
+          name: 'Griz Pur',
           nameEn: 'Pure Gray',
           primaryColor: const Color(0xFF374151),
           secondaryColor: const Color(0xFF6B7280),
@@ -211,7 +222,7 @@ class ThemeModel {
       case 'highcontrast':
         return ThemeModel(
           id: 'highcontrast',
-          name: 'Kuntrast Għoli',
+          name: 'Kuntrast Gholi',
           nameEn: 'High Contrast',
           primaryColor: Colors.black,
           secondaryColor: const Color(0xFF374151),
@@ -233,11 +244,14 @@ class ThemeModel {
           surfaceColor: const Color(0xFF374151).withOpacity(0.1),
           textColor: const Color(0xFF111827),
           textSecondaryColor: const Color(0xFF6B7280),
+          correctColor: const Color(0xFF16A34A),
+          presentColor: const Color(0xFFD97706),
+          absentColor: const Color(0xFF9CA3AF),
         );
       case 'charcoal':
         return ThemeModel(
           id: 'charcoal',
-          name: 'Faħam',
+          name: 'Faham',
           nameEn: 'Charcoal',
           primaryColor: const Color(0xFF1F2937),
           accentColor: const Color(0xFF4B5563),
@@ -250,7 +264,7 @@ class ThemeModel {
       case 'minimal':
         return ThemeModel(
           id: 'minimal',
-          name: 'Minimaliżmu',
+          name: 'Minimalizmu',
           nameEn: 'Minimalism',
           primaryColor: const Color(0xFF6B7280),
           secondaryColor: const Color(0xFF9CA3AF),
@@ -272,6 +286,9 @@ class ThemeModel {
           surfaceColor: const Color(0xFFA28242).withOpacity(0.2),
           textColor: const Color(0xFF000000),
           textSecondaryColor: const Color.fromARGB(255, 60, 62, 66),
+          correctColor: const Color(0xFF16A34A),
+          presentColor: const Color(0xFFB45309),
+          absentColor: const Color(0xFF78716C),
         );
       case 'redblue':
         return ThemeModel(

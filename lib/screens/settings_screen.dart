@@ -3,17 +3,21 @@ import '../models/theme_model.dart';
 import '../widgets/backup_dialog.dart';
 import '../widgets/slide_route.dart';
 import '../services/onboarding_service.dart';
+import '../services/purchase_service.dart';
 import 'styles_modal.dart';
 import 'app_info_screen.dart';
 import 'how_to_play_screen.dart';
 import 'tutorial_screen.dart';
 
-class SettingsScreen extends StatelessWidget {
+class SettingsScreen extends StatefulWidget {
   final ThemeModel theme;
   final String currentTheme;
   final Function(String) onThemeSelect;
   final VoidCallback? onDataChanged;
   final VoidCallback onBack;
+  final bool colorblindMode;
+  final ValueChanged<bool> onColorblindModeChanged;
+  final bool isAdFree;
 
   const SettingsScreen({
     super.key,
@@ -22,7 +26,33 @@ class SettingsScreen extends StatelessWidget {
     required this.onThemeSelect,
     this.onDataChanged,
     required this.onBack,
+    required this.colorblindMode,
+    required this.onColorblindModeChanged,
+    this.isAdFree = false,
   });
+
+  @override
+  State<SettingsScreen> createState() => _SettingsScreenState();
+}
+
+class _SettingsScreenState extends State<SettingsScreen> {
+  bool _purchasePending = false;
+
+  ThemeModel get theme => widget.theme;
+
+  @override
+  void initState() {
+    super.initState();
+    PurchaseService().onPurchaseStateChanged = () {
+      if (mounted) setState(() {});
+    };
+  }
+
+  @override
+  void dispose() {
+    PurchaseService().onPurchaseStateChanged = null;
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +63,7 @@ class SettingsScreen extends StatelessWidget {
           if (details.delta.dx > 0) {
             // Add some resistance by requiring minimum swipe distance
             if (details.primaryDelta! > 8) {
-              onBack();
+              widget.onBack();
             }
           }
         },
@@ -59,7 +89,7 @@ class SettingsScreen extends StatelessWidget {
                     child: Row(
                       children: [
                         IconButton(
-                          onPressed: onBack,
+                          onPressed: widget.onBack,
                           icon: Icon(
                             Icons.arrow_back,
                             color: theme.textColor,
@@ -103,6 +133,37 @@ class SettingsScreen extends StatelessWidget {
                                   subtitle: 'Choose your favorite colors',
                                   onTap: () => _showStylesModal(context),
                                 ),
+                                _buildColorblindToggle(),
+                                const SizedBox(height: 24),
+                                _buildSectionTitle('Premium'),
+                                if (widget.isAdFree)
+                                  _buildSettingsTile(
+                                    icon: Icons.check_circle,
+                                    iconColor: Colors.green,
+                                    title: 'Ads Removed',
+                                    subtitle: 'Thank you for your support!',
+                                    onTap: () {},
+                                  )
+                                else ...[
+                                  _buildSettingsTile(
+                                    icon: Icons.remove_circle_outline,
+                                    iconColor: theme.accentColor,
+                                    title: 'Remove Banner Ads',
+                                    subtitle: PurchaseService().removeAdsProduct != null
+                                        ? PurchaseService().removeAdsProduct!.price
+                                        : 'One-time purchase',
+                                    onTap: _purchasePending
+                                        ? () {}
+                                        : () => _handlePurchaseRemoveAds(),
+                                  ),
+                                  _buildSettingsTile(
+                                    icon: Icons.restore,
+                                    iconColor: theme.accentColor,
+                                    title: 'Restore Purchases',
+                                    subtitle: 'Restore previous purchases',
+                                    onTap: () => _handleRestorePurchases(context),
+                                  ),
+                                ],
                                 const SizedBox(height: 24),
                                 _buildSectionTitle('Data'),
                                 _buildSettingsTile(
@@ -246,6 +307,74 @@ class SettingsScreen extends StatelessWidget {
     );
   }
 
+  Widget _buildColorblindToggle() {
+    return Container(
+      margin: const EdgeInsets.only(bottom: 12),
+      decoration: BoxDecoration(
+        color: theme.surfaceColor,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: theme.backgroundColor.withOpacity(0.5)),
+      ),
+      child: SwitchListTile(
+        secondary: Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: theme.accentColor.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Icon(
+            Icons.visibility,
+            color: theme.accentColor,
+            size: 24,
+          ),
+        ),
+        title: Text(
+          'Colorblind Mode',
+          style: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            color: theme.textColor,
+          ),
+        ),
+        subtitle: Text(
+          'High-contrast colors for color vision deficiency',
+          style: TextStyle(
+            fontSize: 14,
+            color: theme.textColor.withOpacity(0.7),
+          ),
+        ),
+        value: widget.colorblindMode,
+        onChanged: widget.onColorblindModeChanged,
+        activeColor: theme.accentColor,
+      ),
+    );
+  }
+
+  Future<void> _handlePurchaseRemoveAds() async {
+    setState(() => _purchasePending = true);
+    final success = await PurchaseService().purchaseRemoveAds();
+    if (!success && mounted) {
+      setState(() => _purchasePending = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text('Purchase not available right now.'),
+          backgroundColor: theme.primaryColor,
+        ),
+      );
+    }
+  }
+
+  Future<void> _handleRestorePurchases(BuildContext context) async {
+    await PurchaseService().restorePurchases();
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: const Text('Restoring purchases...'),
+        backgroundColor: theme.primaryColor,
+      ),
+    );
+  }
+
   void _showStylesModal(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -253,8 +382,8 @@ class SettingsScreen extends StatelessWidget {
       backgroundColor: Colors.transparent,
       builder: (context) => StylesModal(
         isOpen: true,
-        currentTheme: currentTheme,
-        onThemeSelect: onThemeSelect,
+        currentTheme: widget.currentTheme,
+        onThemeSelect: widget.onThemeSelect,
         onClose: () => Navigator.of(context).pop(),
       ),
     );
@@ -266,8 +395,8 @@ class SettingsScreen extends StatelessWidget {
       builder: (context) => BackupDialog(
         theme: theme,
         onDataChanged: () {
-          if (onDataChanged != null) {
-            onDataChanged!();
+          if (widget.onDataChanged != null) {
+            widget.onDataChanged!();
           }
         },
       ),
